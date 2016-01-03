@@ -115,3 +115,38 @@ Proof. reflexivity. Qed.
 Example test_oddb2: (oddb (S (S (S (S O))))) = false.
 Proof. reflexivity. Qed.
 
+Module Playground2.
+
+Fixpoint plus (n:nat) (m:nat) : nat :=
+  match n with
+    | O => m
+    | (S n') => S (plus n' m)
+  end.
+
+Eval compute in (plus (S (S (S O))) (S (S O))).
+
+Fixpoint mult (n m : nat) : nat :=
+  match n with
+    | O => O
+    | S n' => plus m (mult n' m)
+  end.
+
+Eval compute in (mult 3 3).
+
+Fixpoint minus (n m: nat) : nat :=
+  match n, m with
+    | 0, _ => 0
+    | S _ , 0 => n
+    | S n' , S m' => minus n' m'
+  end.
+
+End Playground2.
+
+Fixpoint exp (base power : nat) : nat :=
+  match power with
+    | O => (S O)
+    | S p => mult base (exp base p)
+  end.
+
+
+
