@@ -187,3 +187,24 @@ Example test_blt_nat2: (blt_nat 2 4) = true.
 Proof. reflexivity. Qed.
 Example test_blt_nat3: (blt_nat 4 2) = false.
 Proof. reflexivity. Qed.
+
+Theorem plus_O_n : forall n : nat, 0 + n = n.
+Proof.
+  intros n.
+  simpl.
+  reflexivity.
+Qed.
+
+Theorem plus_n_O : forall n, n+0 = n.
+Proof.
+  simpl.
+Abort.
+
+Theorem plus_1_l : forall n:nat, 1 + n = S n.
+Proof.
+  intros n. 
+  simpl.
+  reflexivity. 
+Qed.
+
+
