@@ -148,5 +148,42 @@ Fixpoint exp (base power : nat) : nat :=
     | S p => mult base (exp base p)
   end.
 
+Check ((0 +1) + 1).
 
+Fixpoint beq_nat (n m : nat) : bool :=
+  match n,m with
+    | O,O => true
+    | O,(S n') => false
+    | S n',O => false
+    | S n',S m' => beq_nat n' m'
+  end.
 
+Fixpoint ble_nat (n m : nat) : bool :=
+  match n,m with
+    | O,O => true
+    | O,(S n') => true
+    | S n',O => false
+    | S n',S m' => ble_nat n' m'
+  end.
+
+Example test_ble_nat1: (ble_nat 2 2) = true.
+Proof. reflexivity. Qed.
+Example test_ble_nat2: (ble_nat 2 4) = true.
+Proof. reflexivity. Qed.
+Example test_ble_nat3: (ble_nat 4 2) = false.
+Proof. reflexivity. Qed.
+
+Definition blt_nat (n m : nat) : bool :=
+  match n,m with
+    | O,O => false
+    | O,(S n') => true
+    | (S n'),O => false
+    | (S n'),(S m') => andb (ble_nat n' m') (negb (beq_nat n' m'))
+  end.
+
+Example test_blt_nat1: (blt_nat 2 2) = false.
+Proof. reflexivity. Qed.
+Example test_blt_nat2: (blt_nat 2 4) = true.
+Proof. reflexivity. Qed.
+Example test_blt_nat3: (blt_nat 4 2) = false.
+Proof. reflexivity. Qed.
