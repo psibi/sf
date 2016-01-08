@@ -39,3 +39,12 @@ Proof.
     reflexivity.
 Qed.
 
+Theorem mult_0_plus' : forall n m : nat,
+  (0 + n) * m = n * m.
+Proof.
+  intros n m.
+  assert (H: 0 + n = n).
+    Case "Proof of assertion". reflexivity.
+  rewrite -> H.
+  reflexivity.
+Qed.
