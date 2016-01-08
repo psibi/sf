@@ -48,3 +48,45 @@ Proof.
   rewrite -> H.
   reflexivity.
 Qed.
+
+Lemma plus_help: forall n m: nat,
+  S (n + m) = n + S m.
+Proof.
+  intros n m.
+  induction n as [| n].
+  Case "n = 0".
+    simpl.
+    reflexivity.
+  Case "n = S n".
+    simpl.
+    rewrite -> IHn.
+    reflexivity.
+Qed.
+
+Theorem plus_comm : forall n m : nat,
+  n + m = m + n.
+Proof.
+  intros n m.
+  induction n as [| n].
+  Case "n = 0".
+    simpl.
+    rewrite <- plus_n_O.
+    reflexivity.
+  Case "n = S n".
+    simpl.
+    rewrite -> IHn.
+    rewrite -> plus_help.
+    reflexivity.
+Qed.
+
+Theorem plus_rearrange_firsttry : forall n m p q : nat,
+  (n + m) + (p + q) = (m + n) + (p + q).
+Proof.
+  intros n m p q.
+  assert (H: n + m = m + n).
+    Case "Proof of assertion".
+    rewrite -> plus_comm.
+    reflexivity.
+  rewrite -> H.
+  reflexivity.
+Qed.  
