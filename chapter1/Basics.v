@@ -233,3 +233,33 @@ Proof.
   reflexivity.
   reflexivity.
 Qed.
+
+Inductive bin : Type :=
+  | zero : bin
+  | twice : bin -> bin
+  | twice_plus_one : bin -> bin.
+
+Fixpoint twice_nat (n:nat) : nat :=
+  match n with
+    | O => O
+    | (S n') => S (S (twice_nat n'))
+end.
+
+Fixpoint bin_to_nat (n:bin) : nat :=
+  match n with
+    | zero => O
+    | twice x => twice_nat (bin_to_nat x)
+    | twice_plus_one x => S (twice_nat (bin_to_nat x))
+end.
+
+Fixpoint incr (n:bin) : bin :=
+    match n with
+      | zero => twice_plus_one zero
+      | twice x => twice_plus_one x
+      | twice_plus_one x => twice (incr x)
+    end.
+
+Example test_bin_incr1: (bin_to_nat(incr zero)) = (S O).
+Proof.
+reflexivity.
+Qed.
