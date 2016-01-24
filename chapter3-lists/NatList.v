@@ -115,3 +115,27 @@ Proof. reflexivity. Qed.
 Example test_app3: [1;2;3] ++ nil = [1;2;3].
 Proof. reflexivity. Qed.
               
+Definition hd (default:nat) (l:natlist) : nat :=
+  match l with
+    | nil => default
+    | (x :: xs) => x
+  end.
+
+Definition tl (l:natlist) : natlist :=
+  match l with
+    | nil => nil
+    | (x::xs) => xs
+  end.
+
+Example test_hd1: hd 0 [1;2;3] = 1.
+Proof. reflexivity. Qed.
+
+Example test_hd2: hd 0 [] = 0.
+Proof. reflexivity. Qed.
+
+Example test_tl: tl [1;2;3] = [2;3].
+Proof. reflexivity. Qed.
+
+
+               
+
