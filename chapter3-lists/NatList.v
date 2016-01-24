@@ -1,4 +1,6 @@
+
 Require Export Induction.
+Require Export Basics.
 
 Module NatList.
 
@@ -136,6 +138,45 @@ Proof. reflexivity. Qed.
 Example test_tl: tl [1;2;3] = [2;3].
 Proof. reflexivity. Qed.
 
+Fixpoint listFilter (l:natlist) (fn: nat -> bool) : natlist :=
+  match l with
+    | nil => nil
+    | (x::xs) => match (fn x) with
+                   | true => (x::(listFilter xs fn))
+                   | false => listFilter xs fn
+                 end
+  end.
+                      
+
+Definition checkZero (x : nat) : bool :=
+  match x with
+    | O => false
+    | S n => true
+  end.
+
+Fixpoint nonzeros (l:natlist) : natlist :=
+  listFilter l checkZero.
+
+Example test_nonzeros: nonzeros [0;1;0;2;3;0;0] = [1;2;3].
+Proof. reflexivity. Qed.
+
+Fixpoint oddmembers (l:natlist) : natlist :=
+  listFilter l (fun n => oddb n).
+
+Example test_oddmembers: oddmembers [0;1;0;2;3;0;0] = [1;3].
+Proof. reflexivity. Qed.
+
+Fixpoint countoddmembers (l:natlist) : nat :=
+  length (oddmembers l).
+
+Example test_countoddmembers1: countoddmembers [1;0;3;1;4;5] = 4.
+Proof. reflexivity. Qed.
+
+Example test_countoddmembers2: countoddmembers [0;2;4] = 0.
+Proof. reflexivity. Qed.
+
+Example test_countoddmembers3: countoddmembers nil = 0.
+Proof. reflexivity. Qed.
 
                
 
