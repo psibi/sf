@@ -279,7 +279,33 @@ Proof. reflexivity. Qed.
 Example test_subset2: subset [1;2;2] [2;1;4;1] = false.
 Proof. reflexivity. Qed.
 
+Theorem same_equal: forall (n: nat),
+  beq_nat n n = true.
+Proof.
+  intros n.
+  induction n as [| n'].
+  Case "n = 0".
+    reflexivity.
+  Case "n = S n'".
+    simpl.
+    rewrite -> IHn'.
+    reflexivity.
+Qed.
 
-
-               
-
+Theorem bag_theorem: forall n: nat, forall b: bag,
+  blt_nat O (count n (add n b)) = true.
+Proof.
+  intros n b.
+  destruct n as [| n'].
+  Case "n = 0".
+    simpl.
+    reflexivity.
+  Case "n = S n'".
+    simpl.
+    assert (H1: beq_nat n' n' = true).
+      rewrite -> same_equal.
+      reflexivity.
+    rewrite -> H1.
+    simpl.
+    reflexivity.
+Qed.
