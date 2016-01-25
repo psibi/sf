@@ -309,3 +309,31 @@ Proof.
     simpl.
     reflexivity.
 Qed.
+
+Theorem nil_app : forall l:natlist,
+  [] ++ l = l.
+Proof. reflexivity. Qed.
+
+Theorem tl_length_pred : forall l:natlist,
+  pred (length l) = length (tl l).
+Proof.
+  intros l.
+  destruct l as [| n l'].
+  Case "l = nil".
+    reflexivity.
+  Case "l = cons n l'".
+    reflexivity. Qed.
+
+Check pred.
+Example pred_one: (pred 3 = 2).
+Proof.
+  simpl.
+  reflexivity.
+Qed.
+
+Example pred_two: (pred 0 = 0).
+Proof.
+  simpl.
+  reflexivity.
+Qed.
+  
