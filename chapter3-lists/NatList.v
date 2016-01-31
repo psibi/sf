@@ -470,6 +470,34 @@ Proof.
     reflexivity.
 Qed.
 
+Theorem app_assoc4 : forall l1 l2 l3 l4 : natlist,
+  l1 ++ (l2 ++ (l3 ++ l4)) = ((l1 ++ l2) ++ l3) ++ l4.
+Proof.
+  intros l1 l2 l3 l4.
+  rewrite -> app_assoc.
+  induction l1 as [| n l1'].
+  Case "l1 = nil".
+    simpl.
+    reflexivity.
+  Case "l1 = cons n l1'".
+    simpl.
+    rewrite -> IHl1'.
+    reflexivity.
+Qed.
+
+
+Theorem snoc_append : forall (l:natlist) (n:nat),
+  snoc l n = l ++ [n].
+Proof.
+  intros l n.
+  induction l as [|n' l'].
+  Case "l = nil".
+    reflexivity.
+  Case "l = cons n' l'".
+    simpl.
+    rewrite -> IHl'.
+    reflexivity.
+Qed.
     
 
 
