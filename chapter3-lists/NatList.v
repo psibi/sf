@@ -430,3 +430,49 @@ Qed.
 (* test_rev2: rev [] = [] *)
 (* test_rev1: rev [1; 2; 3] = [3; 2; 1] *)
 
+Theorem app_nil_end : forall l : natlist,
+  l ++ [] = l.
+Proof.
+  intros l.
+  induction l as [| n l'].
+  Case "l = nil".
+    reflexivity.
+  Case "l = cons n l'".
+    simpl.
+    rewrite -> IHl'.
+    reflexivity.
+Qed.
+
+Lemma rev_helper : forall l : natlist, forall n: nat,
+    rev (snoc l n) = n :: rev l.
+Proof.
+  intros l n.
+  induction l as [| l' n'].
+  Case "l = nil".
+    reflexivity.
+  Case "l = cons l' n'".
+    simpl.
+    rewrite -> IHn'.
+    reflexivity.
+Qed.
+
+Theorem rev_involutive : forall l : natlist,
+  rev (rev l) = l.
+Proof.
+  intros l.
+  induction l as [| n l'].
+  Case "l = nil".
+    reflexivity.
+  Case "l = cons n l'".
+    simpl.
+    rewrite -> rev_helper.
+    rewrite -> IHl'.
+    reflexivity.
+Qed.
+
+    
+
+
+
+
+    
