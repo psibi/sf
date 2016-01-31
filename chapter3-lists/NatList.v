@@ -361,7 +361,72 @@ Proof.
     simpl.
     rewrite -> IHl1'.
     reflexivity.
-Qed.    
-    
+Qed.
 
+Fixpoint snoc (l:natlist) (v:nat) : natlist := 
+  match l with
+    | nil => [v]
+    | (cons n l') => n :: (snoc l' v)
+  end.
+
+Example snoc_eg1: (snoc (1::2::3::nil)  4= [1;2;3;4]).
+Proof.
+  reflexivity.
+Qed.
+
+Fixpoint rev (l:natlist) : natlist := 
+  match l with
+    | nil => nil
+    | (h :: t) => snoc (rev t) h
+  end.
+
+Example test_rev1: rev [1;2;3] = [3;2;1].
+Proof.
+  reflexivity.
+Qed.
   
+Example test_rev2: rev nil = nil.
+Proof. reflexivity. Qed.
+
+Theorem rev_length_firsttry : forall l : natlist,
+  length (rev l) = length l.
+Proof.
+  intros l. induction l as [| n l'].
+  Case "l = []".
+    reflexivity.
+  Case "l = cons n l'".
+    simpl.
+    rewrite <- IHl'.
+Abort.
+
+Lemma length_snoc : forall n : nat, forall l : natlist,
+  length (snoc l n) = S (length l).
+Proof.
+  intros n l.
+  induction l as [| n' l'].
+  Case "n = nil".
+    reflexivity.
+  Case "n = cons n' l'".
+    simpl.
+    rewrite -> IHl'.
+    reflexivity.
+Qed.
+
+Theorem rev_length : forall l : natlist,
+  length (rev l) = length l.
+Proof.
+  intros l.
+  induction l as [| n' l'].
+  Case "l = nil".
+    reflexivity.
+  Case "l = cons n' l'".
+    simpl.
+    rewrite -> length_snoc.
+    rewrite -> IHl'.
+    reflexivity.
+Qed.
+
+(* rev_length: forall l : natlist, length (rev l) = length l *)
+(* test_rev2: rev [] = [] *)
+(* test_rev1: rev [1; 2; 3] = [3; 2; 1] *)
+
