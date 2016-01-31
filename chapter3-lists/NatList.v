@@ -337,3 +337,31 @@ Proof.
   reflexivity.
 Qed.
   
+Theorem app_assoc : forall l1 l2 l3 : natlist,
+  (l1 ++ l2) ++ l3 = l1 ++ (l2 ++ l3).
+Proof.
+  intros l1 l2 l3.
+  induction l1 as [| n l1'].
+  Case "l1 = nil".
+    reflexivity.
+  Case "l1 = cons n l1'".
+    simpl.
+    rewrite -> IHl1'.
+    reflexivity.
+Qed.
+
+Theorem app_length : forall l1 l2 : natlist,
+  length (l1 ++ l2) = (length l1) + (length l2).
+Proof.
+  intros l1 l2.
+  induction l1 as [| n l1'].
+  Case "l1 = nil".
+    reflexivity.
+  Case "l1 = const n l1'".
+    simpl.
+    rewrite -> IHl1'.
+    reflexivity.
+Qed.    
+    
+
+  
