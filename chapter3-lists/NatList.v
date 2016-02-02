@@ -498,6 +498,47 @@ Proof.
     rewrite -> IHl'.
     reflexivity.
 Qed.
+
+Lemma distr_snoc_helper : forall l1 l2:natlist, forall n:nat,
+  snoc (l1 ++ l2) n = l1 ++ snoc l2 n.
+Proof.
+  intros l1 l2 n.
+  induction l1 as [| n' l1'].
+  Case "l1 = nil".
+    reflexivity.
+  Case "l1 = cons n' l1'".
+    simpl.
+    rewrite -> IHl1'.
+    reflexivity.
+Qed.
+
+Theorem distr_rev : forall l1 l2 : natlist,
+  rev (l1 ++ l2) = (rev l2) ++ (rev l1).
+Proof.
+  intros l1 l2.
+  induction l1 as [| n l1'].
+  Case "l1 = nil".
+    simpl.
+    rewrite -> app_nil_end.
+    reflexivity.
+  Case "l1 = cons n l1'".
+    simpl.
+    rewrite -> IHl1'.
+    rewrite -> distr_snoc_helper.
+    reflexivity.
+Qed.
+
+
+
+
+
+    
+
+
+
+  
+
+
     
 
 
