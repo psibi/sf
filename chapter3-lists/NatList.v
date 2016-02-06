@@ -551,7 +551,23 @@ Proof. reflexivity. Qed.
 Example test_beq_natlist3 : beq_natlist [1;2;3] [1;2;4] = false.
 Proof. reflexivity. Qed.
 
+Theorem beq_natlist_refl : forall l:natlist,
+  true = beq_natlist l l.
+Proof.
+  intros l.
+  induction l as [| n l'].
+  Case "l = nil".
+    reflexivity.
+  Case "l = n :: l'".
+    simpl.
+    rewrite -> same_equal.
+    rewrite <- IHl'.
+    reflexivity.
+Qed.
 
+
+  
+  
 
       
 
