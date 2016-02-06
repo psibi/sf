@@ -1,4 +1,3 @@
-
 Require Export Induction.
 Require Export Basics.
 
@@ -528,20 +527,34 @@ Proof.
     reflexivity.
 Qed.
 
+Lemma nonzeros_app : forall l1 l2 : natlist,
+  nonzeros (l1 ++ l2) = (nonzeros l1) ++ (nonzeros l2).
+Proof.
+Abort.
+
+Fixpoint beq_natlist (l1 l2 : natlist) : bool :=
+  match l1,l2 with
+    | nil, nil => true
+    | _, nil => false
+    | nil, _ => false
+    | (x::xs), (y::ys) => if (beq_nat x y)
+                          then beq_natlist xs ys
+                          else false
+  end.
+
+Example test_beq_natlist1 : (beq_natlist nil nil = true).
+Proof. reflexivity. Qed.
+
+Example test_beq_natlist2 : beq_natlist [1;2;3] [1;2;3] = true.
+Proof. reflexivity. Qed.
+
+Example test_beq_natlist3 : beq_natlist [1;2;3] [1;2;4] = false.
+Proof. reflexivity. Qed.
 
 
+
+      
 
 
     
 
-
-
-  
-
-
-    
-
-
-
-
-    
