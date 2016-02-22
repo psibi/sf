@@ -599,11 +599,26 @@ Definition hd_opt (l : natlist) : natoption :=
   end.
 
 Example test_hd_opt1 : hd_opt [] = None.
-reflexivity. Admitted.
+reflexivity. Qed.
 
 Example test_hd_opt2 : hd_opt [1] = Some 1.
-reflexivity. Admitted.
+reflexivity. Qed.
 
 Example test_hd_opt3 : hd_opt [5;6] = Some 5.
-reflexivity. Admitted.
+reflexivity. Qed.
+
+Theorem option_elim_hd : forall (l:natlist) (default:nat),
+  hd default l = option_elim default (hd_opt l).
+Proof.
+  intros l def.
+  destruct l as [| n l'].
+  Case "l = []".
+    reflexivity.
+  Case "l = n l'".
+    simpl.
+    reflexivity.
+Qed.
+
+
+    
 
