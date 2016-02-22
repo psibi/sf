@@ -619,6 +619,44 @@ Proof.
     reflexivity.
 Qed.
 
+Module Dictionary.
+
+Inductive natoption : Type :=
+| Some : nat -> natoption
+| None : natoption.
+
+Inductive dictionary : Type :=
+  | empty : dictionary
+  | record : nat -> nat -> dictionary -> dictionary.
+
+Definition insert (key value: nat) (d: dictionary) : dictionary :=
+  record key value d.
+
+Fixpoint find (key : nat) (d : dictionary) : natoption := 
+  match d with
+    | empty => None
+    | record k v d' => if (beq_nat key k)
+                       then (Some v)
+                       else find key d'
+  end.
+
+Theorem dictionary_invariant1' : forall (d : dictionary) (k v: nat),
+  (find k (insert k v d)) = Some v.
+Proof.
+  intros d k v.
+  destruct d as [| k1 v1 d1].
+  Case "d = empty".
+    simpl.
+    rewrite -> same_equal.
+    reflexivity.
+  Case "d = record k1 v1 d1".
+    simpl.
+    rewrite -> same_equal.
+    reflexivity.
+Qed.
 
     
+    
+    
 
+End NatList.
