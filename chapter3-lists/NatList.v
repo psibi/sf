@@ -655,6 +655,23 @@ Proof.
     reflexivity.
 Qed.
 
+Theorem dictionary_invariant2' : forall (d : dictionary) (m n o: nat),
+  beq_nat m n = false -> find m d = find m (insert n o d).
+Proof.
+  intros d m n o.
+  intros H1.
+  induction d as [| k v d1].
+  Case "d = empty".
+    simpl.
+    rewrite -> H1.
+    reflexivity.
+  Case "d = record k v d1".
+    simpl.
+    rewrite -> H1.
+    reflexivity.
+Qed.
+
+End Dictionary.
     
     
     
