@@ -39,5 +39,18 @@ Example test_andb34: (andb3 true true false) = false.
 Proof. reflexivity. Qed.
 
 Check negb.
+
+Fixpoint factorial (n:nat) : nat :=
+  match n with
+    | O => S O
+    | S p => mult n (factorial p)
+  end.
+
+Compute (factorial 5).
+                               
+Example test_factorial1: (factorial 3) = 6.
+Proof. simpl. reflexivity. Qed.
+Example test_factorial2: (factorial 5) = (mult 10 12).
+Proof. simpl. reflexivity. Qed.
   
 
