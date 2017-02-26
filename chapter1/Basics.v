@@ -62,6 +62,13 @@ Proof. reflexivity. Qed.
 
 Check true.
 
+
+Infix "&&" := andb.
+Infix "||" := orb.
+
+Example test_orb5: false || false || true = true.
+Proof. simpl. reflexivity. Qed.
+
 Check (negb true).
 
 Eval compute in (negb true).
