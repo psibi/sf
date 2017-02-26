@@ -51,6 +51,9 @@ Definition orb (b1:bool) (b2:bool) : bool :=
     | false => b2
   end.
 
+Infix "&&" := andb.
+Infix "||" := orb.
+
 Example test_orb1: (orb true false) = true.
 Proof. reflexivity. Qed.
 Example test_orb2: (orb false false) = false.
@@ -63,8 +66,7 @@ Proof. reflexivity. Qed.
 Check true.
 
 
-Infix "&&" := andb.
-Infix "||" := orb.
+
 
 Example test_orb5: false || false || true = true.
 Proof. simpl. reflexivity. Qed.
