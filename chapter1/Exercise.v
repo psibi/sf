@@ -1,9 +1,12 @@
-Add LoadPath "/home/sibi/github/sf/chapter1/".
+Require Import Basics.
+
+(* Check that below three functions are working. *)
+(* If they don't work, run build.sh *)
+Check test.
+Check true || true.
+Check Basics.test.
 
 (* The function should return true if either or both of its inputs are false. *)
-
-Check test.
-
 Definition nandb (b1:bool) (b2:bool) : bool :=
   match (b1, b2) with
   | (false, false) => true
