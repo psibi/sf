@@ -1,5 +1,3 @@
-Module Basics1.
-
 Inductive day : Type :=
   | monday : day
   | tuesday : day
@@ -294,5 +292,3 @@ Proof. simpl. reflexivity. Qed.
 
 Definition test : nat := 3.
 Check test.
-
-End Basics1.
