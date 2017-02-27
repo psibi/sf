@@ -11,3 +11,7 @@ Proof General (Emacs plugin) tips:
 * C-c C-l   : Refreshes goals
 * C-c C-a C-a : Run SearchAbout
 * C-c C-;     : Paste SearchAbout response into buffer
+
+References:
+
+* [Coq Modules](https://coq.inria.fr/tutorial/3-modules): Very useful for understanding.
