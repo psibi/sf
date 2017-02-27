@@ -1,6 +1,8 @@
-Require Import Basics.
+Add LoadPath "/home/sibi/github/sf/chapter1/".
 
 (* The function should return true if either or both of its inputs are false. *)
+
+Check test.
 
 Definition nandb (b1:bool) (b2:bool) : bool :=
   match (b1, b2) with
@@ -52,5 +54,32 @@ Example test_factorial1: (factorial 3) = 6.
 Proof. simpl. reflexivity. Qed.
 Example test_factorial2: (factorial 5) = (mult 10 12).
 Proof. simpl. reflexivity. Qed.
+
+(* The blt_nat function tests natural numbers for less-than, yielding a boolean. *)
+
+Fixpoint blt_nat_rec (n m : nat) : bool := 
+  match (n,m) with
+    | (O,O) => false
+    | (O, (S _)) => true
+    | ((S _), O) => false
+    | ((S n'), (S m')) => blt_nat_rec n' m'
+  end.
+
+Check test.
+
+Definition blt_nat (n m : nat) : bool := 
+  match (n,m) with
+    | (O,O) => false
+    | _ => leb n m
+  end.
+
+
+Example test_blt_nat1: (blt_nat 2 2) = false.
+Proof. reflexivity. Qed.
+Example test_blt_nat2: (blt_nat 2 4) = true.
+Proof. simpl. reflexivity. Qed.
+Example test_blt_nat3: (blt_nat 4 2) = false.
+Proof. reflexivity. Qed.
+
   
 

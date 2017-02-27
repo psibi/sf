@@ -1,3 +1,5 @@
+Module Basics1.
+
 Inductive day : Type :=
   | monday : day
   | tuesday : day
@@ -272,3 +274,25 @@ Example test_bin_incr1: (bin_to_nat(incr zero)) = (S O).
 Proof.
 reflexivity.
 Qed.
+
+Fixpoint leb (n m : nat) : bool :=
+  match n with
+  | O => true
+  | S n' =>
+      match m with
+      | O => false
+      | S m' => leb n' m'
+      end
+  end.
+
+Example test_leb1: (leb 2 2) = true.
+Proof. simpl. reflexivity. Qed.
+Example test_leb2: (leb 2 4) = true.
+Proof. simpl. reflexivity. Qed.
+Example test_leb3: (leb 4 2) = false.
+Proof. simpl. reflexivity. Qed.
+
+Definition test : nat := 3.
+Check test.
+
+End Basics1.
