@@ -292,3 +292,16 @@ Proof. simpl. reflexivity. Qed.
 
 Definition test : nat := 3.
 Check test.
+
+Theorem plus_n_O : forall n, n = n + 0.
+Proof.
+  intros n.
+  simpl.
+  Abort.
+
+Theorem mult_0_plus : forall n m : nat,
+  (0 + n) * m = n * m.
+Proof.
+  intros n m.
+  rewrite -> plus_O_n.
+  reflexivity. Qed.
