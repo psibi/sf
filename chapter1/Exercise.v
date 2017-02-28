@@ -73,9 +73,10 @@ Check test.
 Definition blt_nat (n m : nat) : bool := 
   match (n,m) with
     | (O,O) => false
-    | _ => leb n m
+    | _ => if (beq_nat n m)
+           then false
+           else leb n m
   end.
-
 
 Example test_blt_nat1: (blt_nat 2 2) = false.
 Proof. reflexivity. Qed.
