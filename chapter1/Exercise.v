@@ -85,5 +85,27 @@ Proof. simpl. reflexivity. Qed.
 Example test_blt_nat3: (blt_nat 4 2) = false.
 Proof. reflexivity. Qed.
 
+Theorem plus_id_exercise : forall n m o : nat,
+  n = m -> m = o -> n + m = m + o.
+Proof.
+  intros n m o.
+  intros H1.
+  intros H2.
+  rewrite -> H1.
+  rewrite -> H2.
+  reflexivity.
+Qed.
+
+Theorem mult_S_1 : forall n m : nat,
+  m = S n -> m * (1 + n) = m * m.
+Proof.
+  intros n m.
+  intros H.
+  rewrite -> plus_1_l.
+  rewrite <- H.
+  reflexivity.
+Qed.
+    
+
   
 
