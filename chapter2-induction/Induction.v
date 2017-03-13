@@ -90,3 +90,28 @@ Proof.
   rewrite -> H.
   reflexivity.
 Qed.  
+
+Theorem plus_n_O_secondtry : forall n:nat,
+  n = n + 0.
+Proof.
+  intros n.
+  induction n as [| n'].
+  - reflexivity.
+  - simpl.
+    rewrite <- IHn'.
+    reflexivity.
+Qed.
+
+Theorem minus_diag : forall n,
+  minus n n = 0.
+Proof.
+  intros n.
+  induction n as [| n'].
+  - reflexivity.
+  - simpl.
+    rewrite -> IHn'.
+    reflexivity.
+Qed.
+
+
+
