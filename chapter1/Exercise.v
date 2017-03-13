@@ -105,7 +105,69 @@ Proof.
   rewrite <- H.
   reflexivity.
 Qed.
+
+
+Theorem andb_true_elim2 : forall b c : bool,
+  andb b c = true -> c = true.
+Proof.
+  intros b c.
+  intros H.
+  destruct c.
+  reflexivity.
+  rewrite <- H.
+  destruct b.
+  - reflexivity.
+  - reflexivity.
+Qed.
+
+Theorem zero_nbeq_plus_1 : forall n : nat,
+  beq_nat 0 (n + 1) = false.
+Proof.
+  intros n.
+  destruct n.
+  - simpl.
+    reflexivity.
+  - simpl.
+    reflexivity.
+Qed.
+
+Theorem identity_fn_applied_twice :
+  forall (f : bool -> bool),
+  (forall (x : bool), f x = x) ->
+  forall (b : bool), f (f b) = b.
+Proof.
+  intros f H1 b.
+  rewrite -> H1.
+  rewrite -> H1.
+  reflexivity.
+Qed.
+
+Lemma andb_true_l : forall (b : bool), (true && b) = b.
+Proof.
+  intros b.
+  destruct b.
+  - reflexivity.
+  - reflexivity.
+Qed.
+
+Theorem andb_eq_orb :
+  forall (b c : bool),
+  (andb b c = orb b c) ->
+  b = c.
+Proof.
+  intros b c.
+  destruct b.
+  rewrite -> andb_true_l.
+  destruct c.
+  reflexivity.
+  simpl. simpl. intros H1. rewrite -> H1. reflexivity.
+  destruct c.
+  simpl. intros H1. rewrite -> H1. reflexivity.
+  simpl. reflexivity.
+Qed.
     
 
-  
+
+    
+
 
