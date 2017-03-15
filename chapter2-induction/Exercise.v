@@ -1,4 +1,5 @@
 Require Export Basics.
+Require Export Induction.
 
 Print LoadPath.
 
@@ -12,6 +13,16 @@ Proof.
   - reflexivity.
   - simpl.
     rewrite -> IHn'.
+    reflexivity.
+Qed.
+
+Theorem mult_0_n : forall n:nat,
+  0 * n = 0.
+Proof.
+  intros n.
+  induction n as [| n'].
+  - reflexivity.
+  - simpl.
     reflexivity.
 Qed.
 
@@ -42,13 +53,11 @@ Proof.
   - simpl. rewrite -> IHn'. reflexivity.
 Qed.
 
-
 Fixpoint double (n:nat) :=
   match n with
   | O => O
   | S n' => S (S (double n'))
   end.
-
 
 Lemma double_plus : forall n, double n = n + n .
 Proof.
@@ -105,22 +114,74 @@ Proof.
   - simpl.
     rewrite -> IHn'. reflexivity. Qed.
 
+Lemma add_n_1: forall n: nat,
+    n + 1 = S n.
+Proof.
+  intros n.
+  rewrite -> plus_comm.
+  simpl.
+  reflexivity.
+Qed.
+
+Lemma add_a_b_c : forall a b c : nat,
+    a + (b + c) = (c + a) + b.
+Proof.
+  intros.
+  rewrite -> plus_assoc at 1.
+  symmetry.
+  rewrite <- plus_assoc at 1.
+  rewrite -> plus_comm at 1.
+  reflexivity.
+Qed.
+
+Theorem add_helper: forall a b: nat,
+    S (a + b) = a + S b.
+Proof.
+  intros a b.
+  induction b as [|b' IHb'].
+  - simpl. rewrite -> add_n_0. simpl. rewrite <- add_n_1. reflexivity.
+  - rewrite <- IHb'. 
+    rewrite -> plus_comm with (n := a) (m := S (S b')).
+    rewrite <- add_n_1.
+    rewrite <- add_n_1.
+    rewrite <- add_n_1 with (n := S b').
+    rewrite <- add_n_1 with (n := b').
+    symmetry.
+    rewrite -> plus_comm.
+    symmetry.
+    assert(H1: b' + 1 + 1 = S (S b')). {
+      rewrite -> add_n_1.
+      rewrite -> add_n_1.
+      reflexivity.
+    }
+    rewrite -> plus_comm.
+    rewrite -> add_n_1 with (n := (a + b')).
+    rewrite -> IHb'.
+    rewrite -> add_a_b_c at 1.
+    rewrite -> add_n_1 with (n := S b').
+    rewrite -> H1.
+    rewrite -> plus_comm.
+    reflexivity.
+Qed.
+
 Lemma mult_helper: forall n m : nat,
-    m * S n = m + m * n.
+    m * S n = m * n + m.
 Proof.
   intros n m.
-  induction n as [| n' IHn'].
-  - simpl. 
-    rewrite -> mult_n_1.
-    rewrite -> mult_n_0.
-    rewrite -> add_n_0.
-    reflexivity.
-  - simpl.
-    destruct m as [| m'].
+  induction m as [| m' IHm'].
+  - rewrite -> mult_0_n.
     simpl. reflexivity.
-    rewrite -> IHn'.
-Admitted.    
-
+  - simpl.
+    rewrite -> IHm'.
+    rewrite -> add_helper.
+    rewrite -> add_helper with (a := m' * n) (b := m').
+    rewrite -> plus_comm at 1.
+    symmetry.
+    rewrite <- add_a_b_c at 1.
+    symmetry.
+    rewrite <- plus_assoc at 1.
+    reflexivity.
+Qed.    
 
 Theorem mult_comm : forall m n : nat,
   m * n = n * m.
@@ -128,9 +189,12 @@ Proof.
   intros m n.
   induction n as [| n' IHn'].
   - simpl. rewrite -> mult_0_r. reflexivity.
-  - simpl. rewrite <- IHn'.  
-    rewrite <- mult_helper.
-    reflexivity. Qed.
+  - simpl. 
+    rewrite <- IHn'.
+    rewrite <- plus_comm.
+    rewrite -> mult_helper.
+    reflexivity.
+Qed.
 
 Theorem leb_refl : forall n:nat,
   true = leb n n.
