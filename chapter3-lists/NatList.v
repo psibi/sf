@@ -145,7 +145,6 @@ Fixpoint listFilter (l:natlist) (fn: nat -> bool) : natlist :=
                    | false => listFilter xs fn
                  end
   end.
-                      
 
 Definition checkZero (x : nat) : bool :=
   match x with
@@ -343,10 +342,8 @@ Theorem app_assoc : forall l1 l2 l3 : natlist,
 Proof.
   intros l1 l2 l3.
   induction l1 as [| n l1'].
-  Case "l1 = nil".
-    reflexivity.
-  Case "l1 = cons n l1'".
-    simpl.
+  - simpl. reflexivity.
+  - simpl.
     rewrite -> IHl1'.
     reflexivity.
 Qed.
@@ -356,10 +353,9 @@ Theorem app_length : forall l1 l2 : natlist,
 Proof.
   intros l1 l2.
   induction l1 as [| n l1'].
-  Case "l1 = nil".
+  - simpl.
     reflexivity.
-  Case "l1 = const n l1'".
-    simpl.
+  - simpl.
     rewrite -> IHl1'.
     reflexivity.
 Qed.
