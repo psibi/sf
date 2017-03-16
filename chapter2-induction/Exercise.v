@@ -251,6 +251,86 @@ Proof.
     reflexivity.
 Qed.
 
+Theorem S_nbeq_0 : forall n:nat,
+  beq_nat (S n) 0 = false.
+Proof.
+  intros n.
+  simpl.
+  reflexivity.
+Qed.
+
+Theorem mult_1_l : forall n:nat, 
+    1 * n = n.
+Proof.
+  intros n.
+  simpl.
+  rewrite -> plus_n_O.
+  reflexivity.
+Qed.
+
+Theorem all3_spec : forall b c : bool,
+    orb
+      (andb b c)
+      (orb (negb b)
+               (negb c))
+  = true.
+Proof.
+  intros b c.
+  destruct b.
+  - simpl.
+    { destruct c.
+      - simpl. reflexivity.
+      - simpl. reflexivity.
+    }
+  - simpl. reflexivity.
+Qed.
+
+Theorem mult_plus_distr_r : forall n m p : nat,
+  (n + m) * p = (n * p) + (m * p).
+Proof.
+  intros n m p.
+  induction n as [| n' IHn'].
+  - simpl. reflexivity.
+  - simpl. rewrite <- plus_assoc.
+    rewrite <- IHn'.
+    reflexivity.
+Qed.
+
+Theorem mult_assoc : forall n m p : nat,
+  n * (m * p) = (n * m) * p.
+Proof.
+  intros n m p.
+  rewrite -> mult_comm at 1.
+  induction n as [| n' IH'].
+  - simpl. 
+    rewrite -> mult_n_0.
+    reflexivity.
+  - rewrite -> mult_helper at 1.
+    rewrite -> IH'.
+    symmetry.
+    rewrite -> mult_comm with (m := S n' * m) (n := p) at 1.
+    rewrite -> plus_comm at 1.
+    rewrite -> mult_comm with (m := p) (n := m + n' * m) at 1.
+    rewrite -> mult_plus_distr_r with (n := m) (m := n' * m) (p := p) at 1.
+    reflexivity.
+Qed.
+
+Theorem beq_nat_refl : forall n : nat,
+  true = beq_nat n n.
+Proof.
+  intros n.
+  induction n as [| n' IHn'].
+  - simpl. reflexivity.
+  - simpl. rewrite <- IHn'. reflexivity.
+Qed.
 
 
- 
+Theorem plus_swap' : forall n m p : nat,
+  n + (m + p) = m + (n + p).
+Proof.
+  intros n m p.
+  rewrite -> plus_assoc.
+  rewrite -> plus_comm with (n := n) (m := m) at 1.
+  rewrite <- plus_assoc.
+  reflexivity.
+Qed.
