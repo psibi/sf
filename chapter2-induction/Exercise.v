@@ -219,12 +219,38 @@ Proof.
   - simpl. reflexivity.
   - simpl. reflexivity. Qed.
 
+Lemma plus_ble_compat_l_helper1 : forall n m : nat,
+    leb n (n + m) = true.
+Proof.
+  intros.
+  induction n as [| n' IHn'].
+  - simpl. reflexivity.
+  - simpl. rewrite -> IHn'. reflexivity.
+Qed.
+
+Lemma plus_ble_compat_l_helper2 : forall n m p : nat,
+    leb (n + p) (n + m) = leb p m.
+Proof.
+  intros.
+  induction n as [| n' IHn'].
+  - simpl. reflexivity.
+  - simpl. rewrite -> IHn'. reflexivity.
+Qed.
+
 Theorem plus_ble_compat_l : forall n m p : nat,
   leb n m = true -> leb (p + n) (p + m) = true.
 Proof.
   intros n m p H1.
   induction n as [| n' IHn'].
+  - simpl. rewrite -> add_n_0. 
+    rewrite -> plus_ble_compat_l_helper1.
+    reflexivity.
   - simpl.
-Admitted.
-      
+    rewrite -> plus_ble_compat_l_helper2.
+    rewrite -> H1.
+    reflexivity.
+Qed.
+
+
+
  
