@@ -184,7 +184,7 @@ Fixpoint alternate (l1 l2 : natlist) : natlist :=
   match l1, l2 with
     | nil, _ => l2
     | _, nil => l1
-    | x::xs, y::ys => (x::singleton y ++ alternate xs ys)
+    | x::xs, y::ys => (x::y::alternate xs ys)
   end.
 
 Example test_alternate1: alternate [1;2;3] [4;5;6] = [1;4;2;5;3;6].
