@@ -528,7 +528,9 @@ Qed.
 Lemma nonzeros_app : forall l1 l2 : natlist,
   nonzeros (l1 ++ l2) = (nonzeros l1) ++ (nonzeros l2).
 Proof.
-Abort.
+  intros l1 l2.
+  induction l1 as [| n l1'].
+Admitted.
 
 Fixpoint beq_natlist (l1 l2 : natlist) : bool :=
   match l1,l2 with
@@ -605,73 +607,147 @@ reflexivity. Qed.
 Example test_hd_opt3 : hd_opt [5;6] = Some 5.
 reflexivity. Qed.
 
-Theorem option_elim_hd : forall (l:natlist) (default:nat),
-  hd default l = option_elim default (hd_opt l).
-Proof.
-  intros l def.
-  destruct l as [| n l'].
-  Case "l = []".
-    reflexivity.
-  Case "l = n l'".
-    simpl.
-    reflexivity.
-Qed.
-
-Module Dictionary.
-
-Inductive natoption : Type :=
-| Some : nat -> natoption
-| None : natoption.
-
-Inductive dictionary : Type :=
-  | empty : dictionary
-  | record : nat -> nat -> dictionary -> dictionary.
-
-Definition insert (key value: nat) (d: dictionary) : dictionary :=
-  record key value d.
-
-Fixpoint find (key : nat) (d : dictionary) : natoption := 
-  match d with
-    | empty => None
-    | record k v d' => if (beq_nat key k)
-                       then (Some v)
-                       else find key d'
+Definition hd_error (l : natlist) : natoption :=
+  match l with
+    | [] => None
+    | (x::xs) => Some x
   end.
 
-Theorem dictionary_invariant1' : forall (d : dictionary) (k v: nat),
-  (find k (insert k v d)) = Some v.
+Example test_hd_error1 : hd_error [] = None. simpl. reflexivity. Qed.
+
+
+Example test_hd_error2 : hd_error [1] = Some 1.
+reflexivity. Qed.
+
+
+Example test_hd_error3 : hd_error [5;6] = Some 5.
+reflexivity. Qed.
+
+
+Theorem option_elim_hd : forall (l:natlist) (default:nat),
+  hd default l = option_elim default (hd_error l).
 Proof.
-  intros d k v.
-  destruct d as [| k1 v1 d1].
-  Case "d = empty".
-    simpl.
-    rewrite -> same_equal.
-    reflexivity.
-  Case "d = record k1 v1 d1".
-    simpl.
-    rewrite -> same_equal.
+  intros.
+  destruct l.
+  - simpl. reflexivity.
+  - simpl. reflexivity.
+Qed.
+
+Theorem app_nil_r : forall l : natlist,
+  l ++ [] = l.
+Proof.
+  intros l.
+  induction l as [| n l'].
+  - simpl. reflexivity.
+  - simpl. 
+    rewrite <- IHl' at 2.
     reflexivity.
 Qed.
 
-Theorem dictionary_invariant2' : forall (d : dictionary) (m n o: nat),
-  beq_nat m n = false -> find m d = find m (insert n o d).
+Theorem rev_app_distr: forall l1 l2 : natlist,
+  rev (l1 ++ l2) = rev l2 ++ rev l1.
 Proof.
-  intros d m n o.
-  intros H1.
-  induction d as [| k v d1].
-  Case "d = empty".
-    simpl.
-    rewrite -> H1.
+  intros l1 l2.
+  induction l1 as [| n l1'].
+  - simpl.
+    symmetry.
+    rewrite -> app_nil_r with (l := rev l2) at 1.
     reflexivity.
-  Case "d = record k v d1".
-    simpl.
-    rewrite -> H1.
+  - simpl. rewrite -> IHl1'. 
+    rewrite -> snoc_append at 1.
+    symmetry.
+    rewrite -> snoc_append at 1.
+    rewrite -> app_assoc.
     reflexivity.
 Qed.
 
-End Dictionary.
-    
-    
-    
+Theorem count_member_nonzero : forall (s : bag),
+  leb 1 (count 1 (1 :: s)) = true.
+Proof.
+  intros s.
+  simpl.
+  reflexivity.
+Qed.
+
+Theorem ble_n_Sn : forall n,
+  leb n (S n) = true.
+Proof.
+  intros n.
+  induction n as [| n'].
+  - simpl.
+    reflexivity.
+  - simpl.
+    rewrite -> IHn'.
+    reflexivity.
+Qed.
+
+Theorem remove_decreases_count: forall (s : bag),
+  leb (count 0 (remove_one 0 s)) (count 0 s) = true.
+Proof.
+  intros s.
+  induction s as [| n s'].
+  - simpl. reflexivity.
+  - simpl.
+Abort.
 
 End NatList.
+
+Module PartialMap.
+
+Export NatList.
+
+Inductive id: Type :=
+  | Id : nat -> id.
+
+Definition beq_id (x1 x2 : id) :=
+  match x1, x2 with
+    | Id n1, Id n2 => beq_nat n1 n2
+  end.
+
+Theorem beq_id_refl : forall x, true = beq_id x x.
+Proof.
+  intros x.
+  destruct x.
+  - simpl. rewrite -> same_equal. reflexivity.
+Qed.
+
+
+Inductive partial_map : Type :=
+  | empty : partial_map
+  | record : id -> nat -> partial_map -> partial_map.
+
+Definition update (d : partial_map) (x : id) (value : nat) : partial_map :=
+  record x value d.
+
+Fixpoint find (x : id) (d : partial_map) : natoption :=
+  match d with
+  | empty => None
+  | record y v d' => if beq_id x y
+                     then Some v
+                     else find x d'
+  end.
+
+Theorem update_eq :
+  forall (d : partial_map) (x : id) (v: nat),
+    find x (update d x v) = Some v.
+Proof.
+  intros d x v.
+  simpl.
+  destruct x. simpl. rewrite -> same_equal. reflexivity.
+Qed.
+
+Theorem update_neq :
+  forall (d : partial_map) (x y : id) (o: nat),
+    beq_id x y = false -> find x (update d y o) = find x d.
+Proof.
+  intros d x y o.
+  intros H1.
+  induction d as [| z o' d' IHdd'].
+  - simpl. rewrite -> H1. reflexivity.
+  - simpl. rewrite -> H1 at 1. reflexivity.
+Qed.
+
+
+
+
+
