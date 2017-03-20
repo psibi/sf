@@ -114,3 +114,15 @@ Notation "x ++ y" := (app x y)
 
 Definition list123''' := [1; 2; 3].
 
+Theorem app_nil_r : forall (X:Type), forall l:list X,
+  l ++ [] = l.
+Proof.
+  intros X l.
+  induction l as [| n l'].
+  - simpl. reflexivity.
+  - simpl. rewrite -> IHl'. reflexivity.
+Qed.
+
+
+    
+
