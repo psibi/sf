@@ -1,7 +1,7 @@
 Require Export Induction.
 Require Export Basics.
 
-Module NatList.
+Module Lists.
 
 Inductive natprod : Type :=
   pair : nat -> nat -> natprod.
@@ -690,11 +690,11 @@ Proof.
   - simpl.
 Abort.
 
-End NatList.
+End Lists.
 
 Module PartialMap.
 
-Export NatList.
+Export Lists.
 
 Inductive id: Type :=
   | Id : nat -> id.
@@ -747,7 +747,4 @@ Proof.
   - simpl. rewrite -> H1 at 1. reflexivity.
 Qed.
 
-
-
-
-
+End PartialMap.
