@@ -381,5 +381,40 @@ Example test_flat_map1:
   = [1; 1; 1; 5; 5; 5; 4; 4; 4].
 Proof. reflexivity. Qed.
 
+Fixpoint fold {X Y:Type} (f: X -> Y -> Y) (l:list X) (b:Y) : Y :=
+  match l with
+  | nil => b
+  | h :: t => f h (fold f t b)
+  end.
 
+Check (fold andb).
 
+Eval compute in (fold andb [true; true; false] true).
+
+Example fold_example1 :
+  fold mult [1;2;3;4] 1 = 24.
+
+Example fold_example2 :
+  fold andb [true;true;false;true] true = false.
+
+Example fold_example3 :
+  fold app [[1];[];[2;3];[4]] [] = [1;2;3;4].
+
+Definition constfun {X: Type} (x: X) : nat -> X :=
+  fun (k:nat) => x.
+
+Definition ftrue := constfun true.
+
+Example constfun_example1 : ftrue 0 = true.
+
+Example constfun_example2 : (constfun 5) 99 = 5.
+
+Definition plus3 := plus 3.
+Check plus3.
+
+Example test_plus3 : plus3 4 = 7.
+Proof. reflexivity. Qed.
+Example test_plus3' : doit3times plus3 0 = 9.
+Proof. reflexivity. Qed.
+Example test_plus3'' : doit3times (plus 3) 0 = 9.
+Proof. reflexivity. Qed.
