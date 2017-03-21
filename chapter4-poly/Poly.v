@@ -321,3 +321,65 @@ Qed.
 Example test_filter_even_gt7_2 :
   filter_even_gt7 [5;2;6;19;129] = [].
 Proof. reflexivity. Qed.
+
+Definition partition {X : Type} (test : X -> bool) (l : list X) : list X * list X :=
+  (filter (fun n => test n) l, filter (fun n => negb (test n)) l).
+
+Example test_partition1: partition oddb [1;2;3;4;5] = ([1;3;5], [2;4]).
+Proof. reflexivity. Qed.
+Example test_partition2: partition (fun x => false) [5;9;0] = ([], [5;9;0]).
+Proof. reflexivity. Qed.
+
+Fixpoint map {X Y:Type} (f:X -> Y) (l:list X) : (list Y) :=
+  match l with
+  | [] => []
+  | h :: t => (f h) :: (map f t)
+  end.
+
+Example test_map1: map (fun x => plus 3 x) [2;0;2] = [5;3;5].
+Proof. reflexivity. Qed.
+
+Example test_map2:
+  map oddb [2;1;2;5] = [false;true;false;true].
+Proof. reflexivity. Qed.
+
+Example test_map3:
+    map (fun n => [evenb n;oddb n]) [2;1;2;5]
+  = [[true;false];[false;true];[true;false];[false;true]].
+Proof. reflexivity. Qed.
+
+Lemma map_helper : forall (X Y : Type) (f : X -> Y) (a b : list X),
+    map f (a ++ b) = map f a ++ map f b.
+Proof.
+  intros X Y f a b.
+  induction a as [|].
+  - simpl. reflexivity.
+  - simpl. rewrite -> IHa. reflexivity.
+Qed.
+
+Theorem map_rev : forall (X Y : Type) (f : X -> Y) (l : list X),
+  map f (rev l) = rev (map f l).
+Proof.
+  intros X Y f l.
+  induction l as [| n l' IHl].
+  - simpl. reflexivity.
+  - simpl. 
+    rewrite -> map_helper with (a := rev l') (b := [n]) at 1.
+    rewrite -> IHl at 1.
+    simpl.
+    reflexivity.
+Qed.
+
+Fixpoint flat_map {X Y:Type} (f:X -> list Y) (l:list X) : (list Y) :=
+  match l with
+    | [] => []
+    | (x :: xs) => f x ++ flat_map f xs
+  end.
+
+Example test_flat_map1:
+  flat_map (fun n => [n;n;n]) [1;5;4]
+  = [1; 1; 1; 5; 5; 5; 4; 4; 4].
+Proof. reflexivity. Qed.
+
+
+
