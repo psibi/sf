@@ -236,8 +236,11 @@ Fixpoint nth_error {X : Type} (l : list X) (n : nat)
   end.
 
 Example test_nth_error1 : nth_error [4;5;6;7] 0 = Some 4.
+Proof. reflexivity. Qed.
 Example test_nth_error2 : nth_error [[1];[2]] 1 = Some [2].
+Proof. reflexivity. Qed.
 Example test_nth_error3 : nth_error [true] 2 = None.
+Proof. reflexivity. Qed.
 
 Definition doit3times {X:Type} (f:X -> X) (n:X) : X :=
   f (f (f n)).
@@ -393,12 +396,15 @@ Eval compute in (fold andb [true; true; false] true).
 
 Example fold_example1 :
   fold mult [1;2;3;4] 1 = 24.
+Proof. reflexivity. Qed.
 
 Example fold_example2 :
   fold andb [true;true;false;true] true = false.
+Proof. reflexivity. Qed.
 
 Example fold_example3 :
   fold app [[1];[];[2;3];[4]] [] = [1;2;3;4].
+Proof. reflexivity. Qed.
 
 Definition constfun {X: Type} (x: X) : nat -> X :=
   fun (k:nat) => x.
@@ -406,8 +412,10 @@ Definition constfun {X: Type} (x: X) : nat -> X :=
 Definition ftrue := constfun true.
 
 Example constfun_example1 : ftrue 0 = true.
+Proof. reflexivity. Qed.
 
 Example constfun_example2 : (constfun 5) 99 = 5.
+Proof. reflexivity. Qed.
 
 Definition plus3 := plus 3.
 Check plus3.
@@ -418,3 +426,7 @@ Example test_plus3' : doit3times plus3 0 = 9.
 Proof. reflexivity. Qed.
 Example test_plus3'' : doit3times (plus 3) 0 = 9.
 Proof. reflexivity. Qed.
+
+
+
+
