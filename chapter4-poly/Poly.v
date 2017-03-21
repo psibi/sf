@@ -293,24 +293,31 @@ Proof. reflexivity. Qed.
 
 Check filter.
 
-Definition is_even (n : nat) : bool :=
+Fixpoint is_even (n : nat) : bool :=
   match n with
   | O => true
-  | (S (S n')) => true
-  | _ => false
+  | S O => false
+  | (S (S n')) => is_even n'
   end.
 
-Print LoadPath.
-
+Check ble_nat.
+Print ble_nat.
+Locate ble_nat.
+Check and.
+Locate and.
 
 Definition filter_even_gt7 (l : list nat) : list nat :=
-  filter (fun n => and_na)is_even l.
+  filter (fun n => andb (is_even n) (ble_nat 8 n)) l.
+
+Eval compute in filter_even_gt7 [1;2;6;9;10;3;12;8].
 
 Example test_filter_even_gt7_1 :
   filter_even_gt7 [1;2;6;9;10;3;12;8] = [10;12;8].
 Proof. 
   simpl.
+  reflexivity.
+Qed.
 
 Example test_filter_even_gt7_2 :
   filter_even_gt7 [5;2;6;19;129] = [].
- (* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
