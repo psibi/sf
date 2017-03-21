@@ -207,16 +207,11 @@ Check @combine.
 
 Compute (combine [1;2] [false;false;true;true]).
 
-Fixpoint split2 {X Y : Type} (l : list (X*Y)) (g :(list X) * (list Y))
-               : (list X) * (list Y) :=
+Fixpoint split {A B} (l : list (A * B)) : list A * list B :=
   match l with
-    | [] => g
-    | (x,y)::xs => split2 xs ((fst g) ++ [x],(snd g) ++ [y])
+    [] => ([], [])
+  | (x, y) :: xs => let (xs2, ys2) := split xs in (x::xs2, y::ys2)
   end.
-
-Fixpoint split {X Y : Type} (l : list (X*Y))
-               : (list X) * (list Y) :=
-split2 l ([],[]).
 
 Example test_split:
   split [(1,false);(2,false)] = ([1;2],[false;false]).
@@ -225,10 +220,9 @@ Proof.
   reflexivity.
 Qed.
 
-(* TODO: Find out where clause of coq and rewrite split function *)
+Inductive option (X:Type) : Type :=
+  | Some : X -> option X
+  | None : option X.
 
-
-    
-  
-  
-
+Arguments Some {X} _.
+Arguments None {X}.
