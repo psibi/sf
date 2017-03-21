@@ -226,3 +226,91 @@ Inductive option (X:Type) : Type :=
 
 Arguments Some {X} _.
 Arguments None {X}.
+
+
+Fixpoint nth_error {X : Type} (l : list X) (n : nat)
+                   : option X :=
+  match l with
+  | [] => None
+  | a :: l' => if beq_nat n O then Some a else nth_error l' (pred n)
+  end.
+
+Example test_nth_error1 : nth_error [4;5;6;7] 0 = Some 4.
+Example test_nth_error2 : nth_error [[1];[2]] 1 = Some [2].
+Example test_nth_error3 : nth_error [true] 2 = None.
+
+Definition doit3times {X:Type} (f:X -> X) (n:X) : X :=
+  f (f (f n)).
+
+Check @doit3times.
+(* ===> doit3times : forall X : Type, (X -> X) -> X -> X *)
+
+Example test_doit3times: doit3times minustwo 9 = 3.
+Proof. reflexivity. Qed.
+
+Example test_doit3times': doit3times negb true = false.
+Proof. reflexivity. Qed.
+
+Fixpoint filter {X:Type} (test: X->bool) (l:list X)
+                : (list X) :=
+  match l with
+  | [] => []
+  | h :: t => if test h then h :: (filter test t)
+                        else filter test t
+  end.
+
+Example test_filter1: filter evenb [1;2;3;4] = [2;4].
+Proof. reflexivity. Qed.
+
+Definition length_is_1 {X : Type} (l : list X) : bool :=
+  beq_nat (length l) 1.
+
+Example test_filter2:
+    filter length_is_1
+           [ [1; 2]; [3]; [4]; [5;6;7]; []; [8] ]
+  = [ [3]; [4]; [8] ].
+Proof. reflexivity. Qed.
+
+Definition countoddmembers' (l:list nat) : nat :=
+  length (filter oddb l).
+
+Example test_countoddmembers'1: countoddmembers' [1;0;3;1;4;5] = 4.
+Proof. reflexivity. Qed.
+Example test_countoddmembers'2: countoddmembers' [0;2;4] = 0.
+Proof. reflexivity. Qed.
+Example test_countoddmembers'3: countoddmembers' nil = 0.
+Proof. reflexivity. Qed.
+
+Example test_anon_fun':
+  doit3times (fun n => n * n) 2 = 256.
+Proof. reflexivity. Qed.
+
+Example test_filter2':
+    filter (fun l => beq_nat (length l) 1)
+           [ [1; 2]; [3]; [4]; [5;6;7]; []; [8] ]
+  = [ [3]; [4]; [8] ].
+Proof. reflexivity. Qed.
+
+Check filter.
+
+Definition is_even (n : nat) : bool :=
+  match n with
+  | O => true
+  | (S (S n')) => true
+  | _ => false
+  end.
+
+Print LoadPath.
+
+
+Definition filter_even_gt7 (l : list nat) : list nat :=
+  filter (fun n => and_na)is_even l.
+
+Example test_filter_even_gt7_1 :
+  filter_even_gt7 [1;2;6;9;10;3;12;8] = [10;12;8].
+Proof. 
+  simpl.
+
+Example test_filter_even_gt7_2 :
+  filter_even_gt7 [5;2;6;19;129] = [].
+ (* FILL IN HERE *) Admitted.
