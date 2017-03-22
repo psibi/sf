@@ -427,6 +427,117 @@ Proof. reflexivity. Qed.
 Example test_plus3'' : doit3times (plus 3) 0 = 9.
 Proof. reflexivity. Qed.
 
+Module Exercises.
+
+Definition fold_length {X : Type} (l : list X) : nat :=
+  fold (fun _ n => S n) l 0.
+
+Example test_fold_length1 : fold_length [4;7;0] = 3.
+Proof. reflexivity. Qed.
+
+Theorem fold_length_correct : forall X (l : list X),
+  fold_length l = length l.
+Proof.
+  intros X l.
+  induction l as [| n l' IHl'].
+  - simpl.
+    unfold fold_length.
+    simpl.
+    reflexivity.
+  - simpl.
+    unfold fold_length.
+    simpl.
+    fold (fold_length l').
+    rewrite -> IHl'.
+    reflexivity.
+Qed.
+
+    
+Check fold.
+
+Definition fold_map {X Y:Type} (f : X -> Y) (l : list X) : list Y :=
+  fold (fun y ys => f y :: ys) l [].
+
+Theorem fold_map_correct: forall X Y (l : list X) (f : X -> Y),
+    map f l = fold_map f l.
+Proof.
+  intros X Y l f.
+  induction l as [|n l' IHl'].
+  - simpl. 
+    unfold fold_map.
+    simpl.
+    reflexivity.
+  - simpl.
+    unfold fold_map.
+    simpl.
+    fold (fold_map f l').
+    rewrite -> IHl'.
+    reflexivity.
+Qed.
+
+Definition prod_curry {X Y Z : Type}
+  (f : X * Y -> Z) (x : X) (y : Y) : Z := f (x, y).
 
 
+Definition prod_uncurry {X Y Z : Type} 
+  (f : X -> Y -> Z) (p : X * Y) : Z := f (fst p) (snd p).
+
+Example test_map2: map (fun x => plus 3 x) [2;0;2] = [5;3;5].
+Proof. reflexivity. Qed.
+
+(* prod_curry : forall X Y Z :Type, (f : X * Y -> Z) -> (x : X) (y : Y) : Z *)
+
+Check @prod_curry.
+Check @prod_uncurry.
+
+Theorem uncurry_curry : forall (X Y Z : Type)
+                        (f : X -> Y -> Z)
+                        x y,
+  prod_curry (prod_uncurry f) x y = f x y.
+Proof.
+  intros X Y Z f x y.
+  unfold prod_uncurry.
+  unfold prod_curry.
+  simpl.
+  reflexivity.
+Qed.
+
+Lemma fst_snd : forall (X Y : Type) (a : X) (b : Y),
+    (fst (a,b), snd (a,b)) = (a,b).
+Proof.
+  intros X Y a b.
+  simpl.
+  reflexivity.
+Qed.  
+
+Lemma fst_snd_p : forall (X Y : Type) (p : X * Y),
+    (fst p, snd p) = p.
+Proof.
+  intros X Y p.
+  destruct p.
+  - simpl. reflexivity. Qed.
+
+
+Theorem curry_uncurry : forall (X Y Z : Type)
+                        (f : (X * Y) -> Z) (p : X * Y),
+  prod_uncurry (prod_curry f) p = f p.
+Proof.
+  intros X Y Z f p.
+  unfold prod_curry.
+  unfold prod_uncurry.
+  rewrite -> fst_snd_p.
+  reflexivity.
+Qed.
+
+Theorem nth_theorem : forall X n l, 
+  length l = n -> @nth_error X l n = None.
+Proof.
+  intros X n l.
+  intros H.
+  induction n as [|].
+Abort.
+
+
+
+  
 
