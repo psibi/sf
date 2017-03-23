@@ -537,7 +537,4 @@ Proof.
   induction n as [|].
 Abort.
 
-
-
-  
-
+End Exercises.
