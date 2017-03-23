@@ -11,7 +11,14 @@ pushd chapter3-lists
 coqc NatList.v
 cp *.vo ../obj
 popd
+pushd chapter4-poly
+coqc Poly.v
+cp *.vo ../obj
+popd
+pushd chapter5-tactics
+popd
 cp ./obj/*.vo ./chapter1/ 
 cp ./obj/*.vo ./chapter2-induction/
 cp ./obj/*.vo ./chapter3-lists/
 cp ./obj/*.vo ./chapter4-poly/
+cp ./obj/*.vo ./chapter5-tactics/
