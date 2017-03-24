@@ -54,6 +54,34 @@ Proof.
   simpl. reflexivity.
 Qed.
 
+Check nil.
+
+
+Lemma rev_injective : forall (X : Type) (l1 l2 : list X),
+    rev l1 = rev l2 -> l1 = l2.
+Proof.
+  intros X l1 l2.
+  intros H.
+  induction l1 as [| n l1' IHl1'].
+  - simpl. admit.
+  - 
+
+
+
+
+(* Theorem rev_exercise1 : forall (l l' : list nat), *)
+(*      l = rev l' -> *)
+(*      l' = rev l. *)
+(* Proof. *)
+(* .  intros l l'. *)
+(*   intros H1. *)
+(*   induction l as [| x l'' IHl']. *)
+(*   - simpl. *)
+    
+
+
+(*   - rewrite -> H1. symmetry. apply rev_involutive. *)
+(* Abort. *)
 
   
 
