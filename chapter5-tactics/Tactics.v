@@ -62,26 +62,26 @@ Lemma rev_injective : forall (X : Type) (l1 l2 : list X),
 Proof.
   intros X l1 l2.
   intros H.
-  induction l1 as [| n l1' IHl1'].
-  - simpl. admit.
-  - 
+  rewrite <- rev_involutive.
+  rewrite <- H.
+  rewrite -> rev_involutive.
+  reflexivity.
+Qed.
+
+Theorem rev_exercise1 : forall (l l' : list nat),
+     l = rev l' -> l' = rev l.
+Proof.
+  intros l l'.
+  intros H.
+  apply rev_injective.
+  rewrite -> rev_involutive.
+  symmetry.
+  apply H.
+Qed.
 
 
-
-
-(* Theorem rev_exercise1 : forall (l l' : list nat), *)
-(*      l = rev l' -> *)
-(*      l' = rev l. *)
-(* Proof. *)
-(* .  intros l l'. *)
-(*   intros H1. *)
-(*   induction l as [| x l'' IHl']. *)
-(*   - simpl. *)
-    
-
-
-(*   - rewrite -> H1. symmetry. apply rev_involutive. *)
-(* Abort. *)
 
   
+  
+
 
