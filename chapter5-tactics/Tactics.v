@@ -165,7 +165,39 @@ Proof.
     intros H.
     inversion H.
 Qed.
-  
+
+Theorem inversion_ex4 : forall (n : nat),
+  S n = O ->
+  2 + 2 = 5.
+Proof.
+  intros n contra. 
+  inversion contra.
+Qed.
+
+Theorem inversion_ex5 : forall (n m : nat),
+  false = true ->
+  [n] = [m].
+Proof.
+  intros n m contra. inversion contra. Qed.
+
+Example inversion_ex6 : forall (X : Type) (x y z : X) (l j : list X),
+  x :: y :: l = [] -> y :: l = z :: j -> x = z.
+Proof.
+  intros X x y z l j.
+  intros H1.
+  intros H2.
+  inversion H1.
+Qed.
+
+
+Theorem f_equal : forall (A B : Type) (f: A -> B) (x y: A),
+  x = y -> f x = f y.
+Proof. 
+  intros A B f x y eq.
+  rewrite eq.
+  reflexivity. Qed.  
+
+
   
   
 
