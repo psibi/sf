@@ -217,6 +217,30 @@ Proof.
   apply H.
 Qed.
 
+Lemma s_inj_2 : forall n m,
+    n = m -> S n = S m.
+Proof.
+  intros n m.
+  induction n as [| n'].
+  - intros H1.
+    rewrite <- H1.
+    reflexivity.
+  - intros H1.
+    rewrite -> H1.
+    reflexivity.
+Qed.
+
+Lemma s_inj_3 : forall n m,
+    n = m -> S n = S m.
+Proof.
+  intros n m.
+  intros H.
+  destruct n as [| n'].
+  - simpl. rewrite -> H.
+    reflexivity.
+  - rewrite -> H.
+    reflexivity.
+Qed.
 
 Theorem plus_n_n_injective : forall n m,
      n + n = m + m -> n = m.
@@ -239,10 +263,7 @@ Proof.
     + rewrite -> plus_Sn_m in H.
       rewrite <- plus_n_Sm in H.
       inversion H.
-      apply H1 with (m := m') in IHn'.
-Abort.
-      
-
-
-
-
+      apply IHn' with (m := m') in H1.
+      apply s_inj_2.
+      apply H1.
+Qed.
