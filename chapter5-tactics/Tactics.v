@@ -119,3 +119,28 @@ Proof.
   apply H2.
   apply H1.
 Qed.
+
+Theorem S_injective : forall (n m : nat),
+  S n = S m -> n = m.
+Proof.
+  intros n m H.
+  inversion H.
+  reflexivity.
+Qed.
+
+Theorem inversion_ex1 : forall (n m o : nat),
+  [n; m] = [o; o] -> [n] = [m].
+Proof.
+  intros n m o H.
+  inversion H. 
+  reflexivity. Qed.
+
+Theorem inversion_ex2 : forall (n m : nat),
+  [n] = [m] -> n = m.
+Proof.
+  intros n m H.
+  inversion H as [Hnm].
+  reflexivity. Qed.
+
+
+
