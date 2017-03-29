@@ -197,8 +197,52 @@ Proof.
   rewrite eq.
   reflexivity. Qed.  
 
+Theorem S_inj : forall (n m : nat) (b : bool),
+     beq_nat (S n) (S m) = b -> beq_nat n m = b.
+Proof.
+  intros n m b H.
+  simpl in H. 
+  apply H. 
+Qed.
 
-  
-  
+Theorem silly3' : forall (n : nat),
+  (beq_nat n 5 = true -> beq_nat (S (S n)) 7 = true) ->
+  true = beq_nat n 5 ->
+  true = beq_nat (S (S n)) 7.
+Proof.
+  intros n eq H.
+  symmetry in H.
+  apply eq in H.
+  symmetry in H.
+  apply H.
+Qed.
+
+
+Theorem plus_n_n_injective : forall n m,
+     n + n = m + m -> n = m.
+Proof.
+  intros n. induction n as [| n'].
+  - simpl. 
+    intros m H.
+    symmetry in H.
+    destruct m as [| m'].
+    + reflexivity.
+    + rewrite -> plus_Sn_m in H.
+      inversion H.
+  - simpl.
+    rewrite <- plus_n_Sm.
+    intros m.
+    intros H.
+    destruct m as [| m'].
+    + simpl in H.
+      inversion H.
+    + rewrite -> plus_Sn_m in H.
+      rewrite <- plus_n_Sm in H.
+      inversion H.
+      apply H1 with (m := m') in IHn'.
+Abort.
+      
+
+
 
 
