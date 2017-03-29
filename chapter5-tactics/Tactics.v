@@ -142,5 +142,31 @@ Proof.
   inversion H as [Hnm].
   reflexivity. Qed.
 
+ Example inversion_ex3 : forall (X : Type) (x y z : X) (l j : list X),
+  x :: y :: l = z :: j -> y :: l = x :: j -> x = y.
+Proof.
+  intros X x y z l j.
+  intros H1.
+  intros H2.
+  inversion H1 as [H11].
+  inversion H2 as [H21].
+  rewrite -> H11.
+  reflexivity.
+Qed.
+
+
+Theorem beq_nat_0_l : forall n,
+   beq_nat 0 n = true -> n = 0.
+Proof.
+  intros n.
+  destruct n as [| n'].
+  - simpl. reflexivity.
+  - simpl.
+    intros H.
+    inversion H.
+Qed.
+  
+  
+  
 
 
