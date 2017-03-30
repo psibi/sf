@@ -267,3 +267,50 @@ Proof.
       apply s_inj_2.
       apply H1.
 Qed.
+
+Fixpoint double (n:nat) :=
+  match n with
+  | O => O
+  | S n' => S (S (double n'))
+  end.
+
+Theorem double_injective_FAILED : forall n m,
+     double n = double m ->  n = m.
+Proof.
+  intros n m. 
+  induction n as [| n'].
+  - simpl.
+    intros eq.
+    destruct m as [| m'].
+    + reflexivity.
+    + inversion eq.
+  - intros eq.
+    destruct m as [| m'].
+    + inversion eq.
+    + apply f_equal.
+Abort.
+
+Theorem double_injective : forall n m,
+     double n = double m -> n = m.
+Proof.
+  intros n.
+  induction n as [| n'].
+  - simpl.
+    intros m eq.
+    destruct m as [| m'].
+    + reflexivity.
+    + inversion eq.
+  - simpl.
+    intros m eq.
+    destruct m as [| m'].
+    + inversion eq.
+    + simpl in eq.
+      apply f_equal.
+      apply IHn'.
+      apply S_injective.
+      apply S_injective.
+      rewrite -> eq.
+      reflexivity.
+Qed.
+      
+    
