@@ -1,4 +1,7 @@
 Require Export Poly.
+Require Import Coq.Arith.Mult.
+
+Check mult_assoc.
 
 Theorem silly1 : forall (n m o p : nat),
      n = m ->
@@ -375,12 +378,37 @@ Proof.
       reflexivity.
 Qed.
 
+Theorem nth_error_after_last: forall (n : nat) (X : Type) (l : list X),
+     length l = n -> nth_error l n = None.
+Proof.
+  intros n X l.
+  generalize dependent n.
+  induction l as [| n' ].
+  - simpl.
+    intros n eq.
+    reflexivity.
+  - simpl.
+    intros n eq.
+    destruct n as [| n''].
+    + simpl.
+      inversion eq.
+    + apply S_injective in eq.
+      apply IHl in eq.
+      simpl.
+      rewrite -> eq.
+      reflexivity.
+Qed.
 
+Definition square n := n * n.
 
+Check mult_assoc.
 
+Lemma square_mult : forall n m, square (n * m) = square n * square m.
+Proof.
+  intros n m.
+  unfold square.
+  rewrite mult_assoc.
+  assert (H : n * m * n = n * n * m).
+  { rewrite mult_comm. apply mult_assoc. }
+  rewrite H. rewrite mult_assoc. reflexivity.
 
-      
-
-    
-
-x = y -> f x = f y.
