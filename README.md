@@ -30,6 +30,61 @@ See different [styles here](https://www.reddit.com/r/Coq/comments/3be6qg/rewrite
 
 3. [Symmetry tactic for exchanging LHS and RHS](https://coq.inria.fr/faq)
 
+## apply tactic
+
+### Example 1
+
+``` coq
+Theorem f_equal : forall (A B : Type) (f: A -> B) (x y: A),
+  x = y -> f x = f y.
+```
+
+Current goals:
+
+``` coq
+  H : ....
+  ============================
+   S n = S m'
+```
+
+``` coq
+apply f_equal.
+```
+
+Current goals:
+
+``` coq
+  H : ....
+  ============================
+   n = m'
+```
+
+### Example 2
+
+``` coq
+  n' : nat
+  IHn' : forall m : nat, n' + n' = m + m -> n' = m
+  m' : nat
+  H1 : n' + n' = m' + m'
+  ============================
+   S n' = S m'
+```
+
+``` coq
+apply IHn' with (m := m') in H1.
+```
+
+``` coq
+  n' : nat
+  IHn' : forall m : nat, n' + n' = m + m -> n' = m
+  m' : nat
+  H1 : n' = m
+  ============================
+   S n' = S m'
+```
+
 References:
 
 * [Coq Modules](https://coq.inria.fr/tutorial/3-modules): Very useful for understanding.
+
+
