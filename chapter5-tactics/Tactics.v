@@ -312,5 +312,41 @@ Proof.
       rewrite -> eq.
       reflexivity.
 Qed.
+
+Theorem beq_nat_true : forall n m,
+    beq_nat n m = true -> n = m.
+Proof.
+  intros n.
+  induction n as [| n' IH].
+  - simpl.
+    destruct m.
+    + intros eq1.
+      reflexivity.
+    + intros eq1.
+      inversion eq1.
+  - simpl.
+    destruct m.
+    + intros eq1.
+      inversion eq1.
+    + intros eq1.
+      apply IH in eq1.
+      rewrite -> eq1.
+      reflexivity.
+Qed.
+
+
+Theorem double_injective_take2_FAILED : ∀n m,
+     double n = double m →
+     n = m.
+Proof.
+  intros n m. induction m as [| m'].
+  - (* m = O *) simpl. intros eq. destruct n as [| n'].
+    + (* n = O *) reflexivity.
+    + (* n = S n' *) inversion eq.
+  - (* m = S m' *) intros eq. destruct n as [| n'].
+    + (* n = O *) inversion eq.
+    + (* n = S n' *) apply f_equal.
+        (* Stuck again here, just like before. *)
+Abort.
       
     
