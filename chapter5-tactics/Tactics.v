@@ -334,19 +334,53 @@ Proof.
       reflexivity.
 Qed.
 
-
-Theorem double_injective_take2_FAILED : ∀n m,
-     double n = double m →
-     n = m.
+Theorem double_injective_take2_FAILED : forall n m,
+     double n = double m -> n = m.
 Proof.
-  intros n m. induction m as [| m'].
-  - (* m = O *) simpl. intros eq. destruct n as [| n'].
+  intros n m. 
+  induction m as [| m'].
+  - simpl.
+    intros eq. 
+    destruct n as [| n'].
     + (* n = O *) reflexivity.
     + (* n = S n' *) inversion eq.
   - (* m = S m' *) intros eq. destruct n as [| n'].
     + (* n = O *) inversion eq.
-    + (* n = S n' *) apply f_equal.
-        (* Stuck again here, just like before. *)
+    + apply f_equal.
 Abort.
+
+Theorem double_injective_take2 : forall n m,
+     double n = double m -> n = m.
+Proof.
+  intros n m.
+  generalize dependent n.
+  induction m as [| m'].
+  - simpl.
+    destruct n.
+    + simpl.
+      reflexivity.
+    + intros eq.
+      inversion eq.
+  - simpl.
+    destruct n.
+    + simpl.
+      intros eq.
+      inversion eq.
+    + simpl.
+      intros eq.
+      apply S_injective in eq.
+      apply S_injective in eq.
+      apply IHm' in eq.
+      rewrite -> eq.
+      reflexivity.
+Qed.
+
+
+
+
+
       
+
     
+
+x = y -> f x = f y.
