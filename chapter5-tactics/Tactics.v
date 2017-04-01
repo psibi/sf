@@ -411,4 +411,119 @@ Proof.
   assert (H : n * m * n = n * n * m).
   { rewrite mult_comm. apply mult_assoc. }
   rewrite H. rewrite mult_assoc. reflexivity.
+Qed.
 
+Definition sillyfun (n : nat) : bool :=
+  if beq_nat n 3 then false
+  else if beq_nat n 5 then false
+  else false.
+
+Theorem sillyfun_false : forall (n : nat),
+  sillyfun n = false.
+Proof.
+  intros n.
+  unfold sillyfun.
+  destruct (beq_nat n 3).
+  - reflexivity.
+  - destruct (beq_nat n 5).
+    + reflexivity.
+    + reflexivity.
+Qed.
+
+Theorem combine_split : forall X Y (l : list (X * Y)) l1 l2,
+  split l = (l1, l2) -> combine l1 l2 = l.
+Proof.
+  intros X Y l.
+  induction l as [| n l'].
+  - simpl.
+    intros l1 l2 eq.
+    inversion eq.
+    simpl.
+    reflexivity.
+  - intros l1 l2.
+    intros eq.
+Admitted.
+
+Definition sillyfun1 (n : nat) : bool :=
+  if beq_nat n 3 then true
+  else if beq_nat n 5 then true
+  else false.
+
+Eval compute in sillyfun1 1.
+Eval compute in sillyfun1 2.
+Eval compute in sillyfun1 3.
+Eval compute in sillyfun1 4.
+Eval compute in sillyfun1 5.
+Eval compute in sillyfun1 6.
+Eval compute in sillyfun1 11.
+Eval compute in oddb 11.
+
+Theorem sillyfun1_odd_FAILED : forall (n : nat),
+     sillyfun1 n = true -> oddb n = true.
+Proof.
+  intros n eq.
+  unfold sillyfun1 in eq.
+  destruct (beq_nat n 3).
+Abort.
+
+Theorem sillyfun1_odd : forall (n : nat),
+     sillyfun1 n = true -> oddb n = true.
+Proof.
+  intros n eq.
+  unfold sillyfun1 in eq.
+  destruct (beq_nat n 3) eqn:Heqe3.
+  - apply beq_nat_true in Heqe3.
+    rewrite -> Heqe3.
+    unfold oddb.
+    reflexivity.
+  - destruct (beq_nat n 5) eqn:Heqe5.
+    + apply beq_nat_true in Heqe5.
+      rewrite -> Heqe5.
+      unfold oddb.
+      reflexivity.
+    + inversion eq.
+Qed.
+
+Theorem bool_fn_applied_thrice :
+  forall (f : bool -> bool) (b : bool),
+  f (f (f b)) = f b.
+Proof.
+  intros f b.
+  destruct (f b) eqn:H1.
+  - destruct (f true) eqn:H2.
+    + rewrite -> H2.
+      reflexivity.
+    + destruct (f false) eqn:H3.
+      * reflexivity.
+      * destruct b in H1.
+Abort.        
+
+Theorem bool_fn_applied_thrice_1 :
+  forall (f : bool -> bool) (b : bool),
+  f (f (f b)) = f b.
+Proof.
+  intros f b.
+  destruct b.
+  + destruct (f true) eqn:H1.
+    - rewrite -> H1.
+      rewrite -> H1.
+      reflexivity.
+    - destruct (f false) eqn:H2.
+      * rewrite -> H1.
+        reflexivity.
+      * rewrite -> H2.
+        reflexivity.
+  + destruct (f false) eqn:H1.
+    - destruct (f true) eqn:H2.
+      * rewrite -> H2.
+        reflexivity.
+      * rewrite -> H1.
+        reflexivity.
+    - rewrite -> H1.
+      rewrite -> H1.
+      reflexivity.
+Qed.
+      
+
+
+    
