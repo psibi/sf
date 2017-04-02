@@ -54,4 +54,62 @@ Proof.
     inversion H.
 Qed.
 
+Lemma and_example2 :
+  forall n m : nat, n = 0 /\ m = 0 -> n + m = 0.
+Proof.
+  intros n m.
+  intros H.
+  destruct H as [Hn Hm].
+  rewrite -> Hn.
+  rewrite -> Hm.
+  reflexivity.
+Qed.
+
+Lemma and_example2' :
+  forall n m : nat, n = 0 /\ m = 0 -> n + m = 0.
+Proof.
+  intros n m.
+  intros [Hn Hm].
+  rewrite Hn. rewrite Hm.
+  reflexivity.
+Qed.
+
+Lemma and_example3 :
+  forall n m : nat, n + m = 0 -> n * m = 0.
+Proof.
+  intros n m H.
+  assert (H' : n = 0 /\ m = 0).
+  { apply and_exercise. apply H. }
+  destruct H' as [Hn Hm].
+  rewrite Hn. reflexivity.
+Qed.
+
+Lemma proj1 : forall P Q : Prop,
+  P /\ Q -> P.
+Proof.
+  intros P Q.
+  intros H.
+  destruct H as [HP HQ].
+  apply HP.
+Qed.
+
+Lemma proj2 : forall P Q : Prop,
+  P /\ Q -> Q.
+Proof.
+  intros P Q H.
+  destruct H as [HP HQ].
+  apply HQ.
+Qed.
+
+Theorem and_assoc : forall P Q R : Prop,
+  P /\ (Q /\ R) -> (P /\ Q) /\ R.
+Proof.
+  intros P Q R.
+  intros [HP [HQ HR]].
+  split.
+  - split.
+    + apply HP.
+    + apply HQ.
+  - apply HR.
+Qed.
 
