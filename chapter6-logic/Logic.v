@@ -113,3 +113,62 @@ Proof.
   - apply HR.
 Qed.
 
+Lemma or_example :
+  forall n m : nat, n = 0 \/ m = 0 -> n * m = 0.
+Proof.
+  intros n m [Hn | Hm].
+  - rewrite -> Hn.
+    reflexivity.
+  - rewrite -> Hm.
+    rewrite <- mult_n_O.
+    reflexivity.
+Qed.
+
+Lemma or_intro : forall A B : Prop, A -> A \/ B.
+Proof.
+  intros A B.
+  intros HA.
+  left.
+  apply HA.
+Qed.
+
+Lemma zero_or_succ :
+  forall n : nat, n = 0 \/ n = S (pred n).
+Proof.
+  intros n.
+  destruct n.
+  - left.
+    reflexivity.
+  - right.
+    simpl.
+    reflexivity.
+Qed.
+
+Lemma mult_eq_0 :
+  forall n m, n * m = 0 -> n = 0 \/ m = 0.
+Proof.
+  intros n m.
+  intros H.
+  destruct n.
+  - left. reflexivity.
+  - simpl in H.
+    apply and_exercise in H.
+    destruct H as [Hm Hnm].
+    right.
+    apply Hm.
+Qed.
+
+Theorem or_commut : forall P Q : Prop,
+  P \/ Q -> Q \/ P.
+Proof.
+  intros P Q.
+  intros H.
+  destruct H.
+  - right.
+    apply H.
+  - left.
+    apply H.
+Qed.
+
+
+
