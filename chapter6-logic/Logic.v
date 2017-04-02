@@ -280,6 +280,13 @@ Proof.
     apply H. reflexivity.
   - (* b = true *) reflexivity.
 Qed.
+
+Lemma True_is_true : True.
+Proof.
+  apply I.
+Qed.
+
+
   
   
   
