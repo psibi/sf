@@ -170,5 +170,119 @@ Proof.
     apply H.
 Qed.
 
+Module MyNot.
 
+Definition not (P:Prop) := P -> False.
+
+(* Notation "¬ x" := (not x) : type_scope. *)
+
+
+Check not.
+(* ===> Prop -> Prop *)
+
+End MyNot.
+
+Theorem ex_falso_quodlibet : forall (P:Prop),
+  False -> P.
+Proof.
+  intros P cont.
+  destruct cont.
+Qed.
+
+
+Fact not_implies_our_not : forall (P:Prop),
+  ~ P -> (forall (Q:Prop), P -> Q).
+Proof.
+  intros P.
+  unfold not.
+  intros np.
+  intros Q.
+  intros H.
+  apply np in H.
+  inversion H.
+Qed.
+
+Theorem zero_not_one : ~(0 = 1).
+Proof.
+  intros contra.
+  inversion contra.
+Qed.
+
+Check (0 <> 1).
+
+Theorem zero_not_one' : 0 <> 1.
+Proof.
+  unfold not.
+  intros H.
+  inversion H.
+Qed.
+
+Theorem not_False :
+  ~ False.
+Proof.
+  unfold not.
+  intros H.
+  inversion H.
+Qed.
+
+Theorem contradiction_implies_anything : forall P Q : Prop,
+  (P /\ ~P) -> Q.
+Proof.
+  intros P Q.
+  intros [HP1 HP2].
+  unfold not in HP2.
+  apply HP2 in HP1.
+  inversion HP1.
+Qed.
+
+Theorem contrapositive : forall (P Q : Prop),
+  (P -> Q) -> (~Q -> ~P).
+Proof.
+  intros P Q.
+  intros H.
+  intros nQ.
+  unfold not in nQ.
+  unfold not.
+  intros HP.
+  apply H in HP.
+  apply nQ in HP.
+  inversion HP.
+Qed.
+
+Theorem not_both_true_and_false : forall P : Prop,
+  ~ (P /\ ~P).
+Proof.
+  intros P.
+  unfold not.
+  intros [H1 H2].
+  apply H2 in H1.
+  inversion H1.
+Qed.
+
+Theorem not_true_is_false : forall b : bool,
+  b <> true -> b = false.
+Proof.
+  intros [] H.
+  - unfold not in H.
+    apply ex_falso_quodlibet.
+    apply H.
+    reflexivity.
+  - reflexivity.
+Qed.
+
+Theorem not_true_is_false' : forall b : bool,
+  b <> true -> b = false.
+Proof.
+  intros [] H.
+  - (* b = false *)
+    unfold not in H.
+    exfalso. (* <=== *)
+    apply H. reflexivity.
+  - (* b = true *) reflexivity.
+Qed.
+  
+  
+  
+  
+    
 
