@@ -13,6 +13,9 @@ Proof General (Emacs plugin) tips:
 * C-c C-;     : Paste SearchAbout response into buffer
 * C-/         : Go to the proof end (Very handy!)
 
+Useful functions:
+* coq-Print : View the definition of particular function
+
 Notes:
 -------
 
