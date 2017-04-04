@@ -210,6 +210,9 @@ Qed.
 
 Check (0 <> 1).
 
+Eval compute in (0 <> 1).
+Eval compute in (0 <> 0).
+
 Theorem zero_not_one' : 0 <> 1.
 Proof.
   unfold not.
@@ -286,10 +289,114 @@ Proof.
   apply I.
 Qed.
 
+Module MyIff.
 
-  
-  
-  
-  
-    
+Require Import  Coq.Setoids.Setoid.
 
+Definition iff (P Q : Prop) := (P -> Q) /\ (Q -> P).
+
+Notation "P <-> Q" := (iff P Q)
+                      (at level 95, no associativity)
+                      : type_scope.
+
+End MyIff.
+
+Theorem iff_sym : forall P Q : Prop,
+  (P <-> Q) -> (Q <-> P).
+Proof.
+  intros P Q.
+  intros leq.
+  unfold iff in leq.
+  unfold iff.
+  rewrite -> and_comm.
+  apply leq.
+Qed.
+
+Theorem iff_sym_1 : forall P Q : Prop,
+  (P <-> Q) -> (Q <-> P).
+Proof.
+  intros P Q.
+  intros [HAB HBA].
+  split.
+  - apply HBA.
+  - apply HAB.
+Qed.
+
+Lemma not_true_iff_false : forall b,
+  b <> true <-> b = false.
+Proof.
+  intros b.
+  split.
+  - apply not_true_is_false.
+  - intros H1.
+    rewrite -> H1.
+    unfold not.
+    intros H2.
+    inversion H2.
+Qed.
+
+Theorem iff_refl : forall P : Prop,
+  P <-> P.
+Proof.
+  intros P.
+  split.
+  - intros H.
+    apply H.
+  - intros H.
+    apply H.
+Qed.
+
+Theorem iff_trans : forall P Q R : Prop,
+  (P <-> Q) -> (Q <-> R) -> (P <-> R).
+Proof.
+  intros P Q R.
+  intros [HPQ HQP].
+  intros [HQR HRQ].
+  split.
+  - intros P1.
+    apply HPQ in P1.
+    apply HQR in P1.
+    apply P1.
+  - intros P1.
+    apply HRQ in P1.
+    apply HQP in P1.
+    apply P1.
+Qed.
+
+Theorem or_distributes_over_and : forall P Q R : Prop,
+  P \/ (Q /\ R) <-> (P \/ Q) /\ (P \/ R).
+Proof.
+  intros P Q R.
+  unfold iff.
+  split.
+  - intros H1.
+    destruct H1.
+    + split.
+      * apply or_intro.
+        apply H.
+      * apply or_intro.
+        apply H.
+    + split.
+      * apply or_commut.
+        apply or_intro.
+        apply H.
+      * apply or_commut.
+        apply or_intro.
+        apply H.
+  - intros [H1 H2].
+    destruct H1.
+    + apply or_intro.
+      apply H.
+    + apply or_commut.
+      apply or_intro.
+      destruct H2.
+Abort.
+        
+        
+      
+
+
+
+    (* split. *)
+    (* + left. *)
+      
