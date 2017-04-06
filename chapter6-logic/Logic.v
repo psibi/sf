@@ -435,6 +435,22 @@ Proof.
   apply mult_0.
 Qed.
 
+Lemma four_is_even : exists n : nat, 4 = n + n.
+Proof.
+  exists 2.
+  reflexivity.
+Qed.
+
+
+Theorem exists_example_2 : forall n,
+  (exists m, n = 4 + m) ->
+  (exists o, n = 2 + o).
+Proof.
+  intros n.
+  intros [m Hm].
+  exists (2 + m).
+  apply Hm.
+Qed.
   
   
     
