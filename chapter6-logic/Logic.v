@@ -393,12 +393,48 @@ Proof.
       * apply or_commut.
         apply or_intro.
         split. apply H. apply H0.
-Qed.        
-        
+Qed.
 
-        
-        
-      
+Lemma mult_0 : forall n m, n * m = 0 <-> n = 0 \/ m = 0.
+Proof.        
+  intros n m.
+  split.
+  - apply mult_eq_0.
+  - apply or_example.
+Qed.
 
+Lemma or_assoc :
+  forall P Q R : Prop, P \/ (Q \/ R) <-> (P \/ Q) \/ R.
+Proof.
+  intros P Q R.
+  split.
+  - intros [H | [H | H]].
+    + left. left. apply H.
+    + left. right. apply H.
+    + right. apply H.
+  - intros [[H | H] | H].
+    + left. apply H.
+    + right. left. apply H.
+    + right. right. apply H.
+Qed.
 
-      
+Lemma mult_0_3 :
+  forall n m p, n * m * p = 0 <-> n = 0 \/ m = 0 \/ p = 0.
+Proof.
+ intros n m p.
+ rewrite mult_0.
+ rewrite mult_0.
+ rewrite -> or_assoc.
+ reflexivity.
+Qed.
+
+Lemma apply_iff_example :
+  forall n m : nat, n * m = 0 -> n = 0 \/ m = 0.
+Proof.
+  intros n m.
+  apply mult_0.
+Qed.
+
+  
+  
+    
