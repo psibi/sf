@@ -387,16 +387,18 @@ Proof.
     destruct H1.
     + apply or_intro.
       apply H.
-    + apply or_commut.
-      apply or_intro.
-      destruct H2.
-Abort.
+    + destruct H2.
+      * apply or_intro.
+        apply H0.
+      * apply or_commut.
+        apply or_intro.
+        split. apply H. apply H0.
+Qed.        
+        
+
         
         
       
 
 
-
-    (* split. *)
-    (* + left. *)
       
