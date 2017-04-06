@@ -451,6 +451,57 @@ Proof.
   exists (2 + m).
   apply Hm.
 Qed.
-  
-  
+
+Theorem dist_not_exists : forall (X:Type) (P : X -> Prop),
+  (forall x, P x) -> ~ (exists x, ~ P x).
+Proof.
+  intros X P.
+  intros H.
+  unfold not.
+  intro E.
+  inversion E as [ x Hx ].
+  apply Hx.
+  apply H.
+Qed.
+
+Theorem dist_not_exists_2 : forall (X:Type) (P : X -> Prop),
+  (forall x, P x) -> ~ (exists x, ~ P x).
+Proof.
+  intros X P.
+  intros H.
+  unfold not.
+  intros E.
+  destruct E.
+  apply H0.
+  apply H.
+Qed.
+
+Theorem dist_exists_or : forall (X:Type) (P Q : X -> Prop),
+  (exists x, P x \/ Q x) <-> (exists x, P x) \/ (exists x, Q x).
+Proof.
+  intros X P Q.
+  split.
+  - intros H.
+    destruct H.
+    + destruct H.
+      * left.
+        exists x.
+        apply H.
+      * right.
+        exists x.
+        apply H.
+  - intros H.
+    destruct H.
+    + destruct H.
+      exists x.
+      left.
+      apply H.
+    + destruct H.
+      exists x.
+      right.
+      apply H.
+Qed.
+
+      
+
     
