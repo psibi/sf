@@ -502,6 +502,53 @@ Proof.
       apply H.
 Qed.
 
-      
+Require Import Coq.Lists.List.
+Import ListNotations.
 
+Fixpoint In {A : Type} (x : A) (l : list A) : Prop :=
+  match l with
+    | [] => False
+    | x' :: l' => x' = x \/ In x l'
+  end.
+
+Example In_example_1 : In 4 [1; 2; 3; 4; 5].
+Proof.
+  simpl.
+  right.
+  right.
+  right.
+  left.
+  reflexivity.
+Qed.
+
+Example In_example_2 :
+  forall n : nat, In n [2; 4] -> exists n': nat, n = 2 * n'.
+Proof.
+  simpl.
+  intros n.
+  intros [H | [H | []]].
+  - exists 1.
+    simpl. rewrite <- H.
+    reflexivity.
+  - exists 2.
+    simpl.
+    rewrite <- H.
+    reflexivity.
+Qed.
+
+Lemma In_map :
+  forall (A B : Type) (f : A -> B) (l : list A) (x : A),
+    In x l -> In (f x) (map f l).
+Proof.
+  intros A B f l x.
+  induction l as [| x' l' IHl'].
+  - simpl.
+    intros [].
+  - simpl. intros [H | H].
+    left. rewrite -> H. reflexivity.
+    apply IHl' in H.
+    right. apply H.
+Qed.
     
+
+
