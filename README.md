@@ -86,6 +86,25 @@ apply IHn' with (m := m') in H1.
    S n' = S m'
 ```
 
+## destruct tactic
+
+``` coq
+H : P \/ Q
+=============
+S n' = S m'
+```
+
+``` coq
+destruct H as [H1 | H2].
+```
+
+``` coq
+H1 : P
+========
+S n' = S m'
+```
+
+
 References:
 
 * [Coq Modules](https://coq.inria.fr/tutorial/3-modules): Very useful for understanding.
