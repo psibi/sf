@@ -550,5 +550,35 @@ Proof.
     right. apply H.
 Qed.
     
-
-
+Lemma In_map_iff :
+  forall (A B : Type) (f : A -> B) (l : list A) (y : B),
+    In y (map f l) <->
+    exists x, f x = y /\ In x l.
+Proof.
+  intros A B f l y.
+  split.
+  - induction l as [| x' l' IHl'].
+    + simpl.
+      intros H.
+      inversion H.
+    + simpl.
+      intros H.
+      destruct H as [H1 | H2].
+      * exists x'.
+        split. apply H1.
+        rewrite <- H1 in IHl'.
+        left.
+        reflexivity.
+      * apply IHl' in H2.
+        destruct H2.
+        exists x.
+        split. apply H.
+        right.
+        apply H.
+  - intros H.
+    destruct H.
+    destruct H as [H1 H2].
+    apply In_map with (f := f) in H2.
+    rewrite -> H1 in H2.
+    apply H2.
+Qed.
