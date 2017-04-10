@@ -582,3 +582,60 @@ Proof.
     rewrite -> H1 in H2.
     apply H2.
 Qed.
+
+Lemma in_app_iff : forall A l l' (a:A),
+  In a (l++l') <-> In a l \/ In a l'.
+Proof.
+  intros A l l' a.
+  split.
+  - generalize dependent l'.
+    induction l as [| x l'' IHl].
+    + simpl.
+      intros l' H.
+      right.
+      apply H.
+    + simpl.
+      intros l' H.
+      destruct H as [H1 | H2].
+      * left. left. apply H1.
+      * apply IHl in H2.
+        destruct H2 as [H3 | H4].
+        left. right. apply H3.
+        right. apply H4.
+  - generalize dependent l'.
+    induction l as [| x l'' IHl'].
+    + intros l' [H1 | H2].
+      simpl in H1.
+      inversion H1.
+      simpl. apply H2.
+    + simpl.
+      intros l' [[H1 | H2] | H3].
+      left. apply H1.
+Abort.
+
+Fixpoint All {T : Type} (P : T -> Prop) (l : list T) : Prop :=
+  match l with
+    | [] => True
+    | x :: l' => P x /\ All P l'
+  end.
+
+Lemma All_In :
+  forall T (P : T -> Prop) (l : list T), 
+  (forall x, In x l -> P x) <-> All P l.
+Proof.
+  intros T P l.
+  split.
+  - induction l as [| x l' IHl'].
+    + simpl.
+      intros H.
+      apply I.
+    + simpl.
+      intros H.
+Abort.
+
+
+      
+      
+      
+
+    
