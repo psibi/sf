@@ -88,6 +88,8 @@ apply IHn' with (m := m') in H1.
 
 ## destruct tactic
 
+### Example 1
+
 ``` coq
 H : P \/ Q
 =============
@@ -104,6 +106,43 @@ H1 : P
 S n' = S m'
 ```
 
+### Example 2
+
+``` coq
+  H2 : exists x : A, f x = y /\ In x l'
+  ============================
+   exists x : A, f x = y /\ (x' = x \/ In x l')
+```
+
+``` coq
+destruct H2
+```
+
+``` coq
+  x : A
+  H : f x = y /\ In x l'
+  ============================
+   exists x0 : A, f x0 = y /\ (x' = x0 \/ In x0 l')
+```
+
+### Example 3
+
+``` coq
+  H : f x = y /\ In x l
+  ============================
+   In y (map f l)
+```
+
+``` coq
+destruct H as [H1 H2].
+```
+
+``` coq
+  H1 : f x = y
+  H2 : In x l
+  ============================
+   In y (map f l)
+```
 
 References:
 
