@@ -611,7 +611,17 @@ Proof.
     + simpl.
       intros l' [[H1 | H2] | H3].
       left. apply H1.
-Abort.
+      specialize IHl' with l'.
+      right.
+      apply IHl'.
+      left.
+      apply H2.
+      specialize IHl' with l'.
+      right.
+      apply IHl'.
+      right.
+      apply H3.
+Qed.
 
 Fixpoint All {T : Type} (P : T -> Prop) (l : list T) : Prop :=
   match l with
