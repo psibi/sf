@@ -641,11 +641,35 @@ Proof.
       apply I.
     + simpl.
       intros H.
+      pose proof (H x) as HS.
+      split.
+      * apply HS.
+        left.
+        reflexivity.
+      * apply IHl'.
+        intros.
+        pose proof (H x0) as HS2.
+        apply HS2.
+        right.
+        apply H0.
+  - intros H.
+    induction l as [| x l' IHl'].
+    + simpl.
+      intros x.
+      intros y.
+      inversion y.
+    + intros x0.
+      simpl.
+      simpl in H.
+      destruct H as [H1 H2].
+      intros H3.
+      apply IHl'.
+      apply H2.
+      destruct H3.
+      rewrite <- H.
+      (* apply IHl' in H2. *)
 Abort.
 
-
-      
-      
-      
+  
 
     
