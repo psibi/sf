@@ -661,15 +661,71 @@ Proof.
     + intros x0.
       simpl.
       simpl in H.
-      destruct H as [H1 H2].
-      intros H3.
-      apply IHl'.
-      apply H2.
-      destruct H3.
-      rewrite <- H.
-      (* apply IHl' in H2. *)
+      intros.
+      destruct H0.
+      * destruct H as [H1 H2].
+        specialize (IHl' H2).
+Abort.        
+
+Definition combine_odd_even (Podd Peven : nat -> Prop) : nat -> Prop :=
+fun n => Podd n \/ Peven n.
+
+Fixpoint evenb (n:nat) : bool :=
+  match n with
+    | O => true
+    | S O => false
+    | S (S n') => evenb n'
+  end.
+
+Definition oddb (n:nat) : bool := negb (evenb n).
+
+Eval compute in oddb 0.
+
+Theorem combine_odd_even_intro :
+  forall (Podd Peven : nat -> Prop) (n : nat),
+    (oddb n = true -> Podd n) ->
+    (oddb n = false -> Peven n) ->
+    combine_odd_even Podd Peven n.
+Proof.
+  intros Podd Peven.
+  intros n.
+  intros H1 H2.
+  induction n as [|n' IHn'].
+  - unfold combine_odd_even.
+    unfold oddb in H2.
+    simpl in H2.
+    assert (H3: false = false).
+    reflexivity.
+    apply H2 in H3.
+    right.
+    apply H3.
+  - unfold combine_odd_even.
 Abort.
 
+Require Import Coq.Arith.Plus.
+
+Lemma plus_comm3_take3 :
+  forall n m p, n + (m + p) = (p + m) + n.
+Proof.
+  intros n m p.
+  rewrite plus_comm.
+  rewrite (plus_comm m).
+  reflexivity.
+Qed.
+
+Example lemma_application_ex :
+  forall {n : nat} {ns : list nat},
+    In n (map (fun m => m * 0) ns) ->
+    n = 0.
+Proof.
+  intros n ns H.
   
 
-    
+  destruct (proj1 _ _ (In_map_iff _ _ _ _ _) H)
+           as [m [Hm _]].
+  rewrite mult_0_r in Hm. rewrite <- Hm. reflexivity.
+Qed.
+
+(* plus_comm *)
+(*      : forall n m : nat, n + m = m + n *)
+
