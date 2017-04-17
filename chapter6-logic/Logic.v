@@ -713,19 +713,24 @@ Proof.
   reflexivity.
 Qed.
 
+Require Import Coq.Arith.Mult.
+
 Example lemma_application_ex :
   forall {n : nat} {ns : list nat},
     In n (map (fun m => m * 0) ns) ->
     n = 0.
 Proof.
   intros n ns H.
-  
-
-  destruct (proj1 _ _ (In_map_iff _ _ _ _ _) H)
-           as [m [Hm _]].
-  rewrite mult_0_r in Hm. rewrite <- Hm. reflexivity.
+  destruct (proj1 _ _ (In_map_iff _ _ _ _ _) H).
+  destruct H0.
+  rewrite mult_0_r in H0.
+  symmetry.
+  apply H0.
 Qed.
 
-(* plus_comm *)
-(*      : forall n m : nat, n + m = m + n *)
+
+
+
+
+
 
